@@ -15,3 +15,18 @@
     - Edetabel
     - Parimad sooritused
     - Keskmised sooritused
+
+
+## Kausta struktuur
+Võib pärast ära kustutada.<br>
+ee.iti0302.veebiback /
+<br> | -- controller
+<br> | -- dto
+<br> | -- model
+<br> | -- repository
+<br> | -- service /
+<br> | -- | -- mapper
+<br> | -- util
+
+
+
