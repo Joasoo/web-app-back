@@ -29,4 +29,9 @@ ee.iti0302.veebiback /
 <br> | -- util
 
 
-
+## 1. Homework requirements
+ - 6 endpoints (must use database)
+ - 3 tier architecture (controller, service, repository)
+ - JPA for database access
+ - Defense on 5th week = +1 bonus point
+ - Defense on 6th week = no bonus point
