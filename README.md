@@ -14,21 +14,21 @@
 
 ### Back-end (spetsiifilisem)
 - Kasutaja (login)
-    - 
+    - a
 - Sõbralist
-    -
+    - a
 - Profiili andmete uuendamine
-    -
+    - a
 - Postitused
-    -
+    - a
 - Grupid
-    -
+    - a
 - Üritused
-    -
+    - a
 - Newsfeed
-    -
+    - a
 - Live chat
-    -
+    - a
 
 
 ## Kausta struktuur
