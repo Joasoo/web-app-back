@@ -8,12 +8,66 @@
       http://www.liquibase.org/xml/ns/pro
       http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
 
-    <changeSet  author="nvoxland"  id="1">
-        <createTable tableName="person">
-            <column  name="id"  type="INTEGER">
-                <constraints  nullable="false"  primaryKey="true"  unique="true"/>
+    <changeSet author="Allan Lip" id="02-12-2023 Create base tables">
+        <createTable tableName="relationship_status">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
             </column>
-            <column  name="name"  type="VARCHAR(255)" />
+            <column name="status" type="text">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="person">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="text">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="date_of_birth" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_rel_status_id" type="bigint">
+                <constraints foreignKeyName="fk_rel_status_id" references="relationship_status(id)"/>
+            </column>
+            <column name="workplace" type="text"/>
+            <column name="residence" type="text" remarks="Current place of living."/>
+            <column name="hometown" type="text"/>
+        </createTable>
+        <createTable tableName="posts" remarks="All posts made by people.">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fk_person_id" type="bigint" remarks="Owner of the post.">
+                <constraints foreignKeyName="fk_person_id" references="person(id)"/>
+            </column>
+            <column name="created_at" type="timestamptz" defaultValueComputed="now()" remarks="Time the post was made.">
+                <constraints nullable="false"/>
+            </column>
+            <column name="edited_at" type="timestamptz" remarks="Time the post was last edited."/>
+            <column name="content" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="person_friend">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fk_person_id" type="bigint">
+                <constraints unique="true" nullable="false" foreignKeyName="fk_person_id" references="person(id)"/>
+            </column>
+            <column name="fk_friend_id" type="bigint">
+                <constraints unique="true" nullable="true" foreignKeyName="fk_friend_id" references="person(id)"/>
+            </column>
         </createTable>
     </changeSet>
 
