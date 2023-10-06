@@ -11,13 +11,22 @@ import java.time.LocalDate;
 @Setter
 @ToString
 public class RegisterDto {
+
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     private LocalDate dateOfBirth;
+
     private String password;
-    // private Object relationshipStatus; /*todo*/
+
+    private String relationshipStatus;
+
     private String workplace;
+
     private String residence;
+
     private String hometown;
 }
