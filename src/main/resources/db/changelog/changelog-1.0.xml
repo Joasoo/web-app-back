@@ -71,4 +71,12 @@
         </createTable>
     </changeSet>
 
+    <changeSet author="Allan Lip" id="06-10-2023 Removed relationship_status table">
+        <dropColumn tableName="person" columnName="fk_rel_status_id" />
+        <addColumn tableName="person">
+            <column type="text" name="rel_status" remarks="Person's current relationship status" />
+        </addColumn>
+        <dropTable tableName="relationship_status"/>
+    </changeSet>
+
 </databaseChangeLog>
