@@ -5,10 +5,8 @@ import ee.iti0302.veebiback.dto.LoginDto;
 import ee.iti0302.veebiback.dto.RegisterDto;
 import ee.iti0302.veebiback.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 
 @RestController

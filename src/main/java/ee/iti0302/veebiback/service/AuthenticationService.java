@@ -15,7 +15,11 @@ public class AuthenticationService {
     public void registerUser(RegisterDto dto) {
         if (accountWithEmailExists(dto.getEmail())) {
             /* todo send exception 'account with this e-mail exists.' */
+            throw new RuntimeException("This e-mail is already in use.");
         }
+
+
+
     }
 
     private boolean accountWithEmailExists(String email) {
