@@ -85,4 +85,10 @@
         <renameTable oldTableName="posts" newTableName="post" />
     </changeSet>
 
+    <changeSet author="Allan Lip" id="07-10-2023 Change person_friend tables column constraints">
+        <dropUniqueConstraint tableName="person_friend" constraintName="person_friend_fk_person_id_key" uniqueColumns="fk_person_id" />
+        <dropUniqueConstraint tableName="person_friend" constraintName="person_friend_fk_friend_id_key" uniqueColumns="fk_friend_id" />
+        <addNotNullConstraint tableName="person_friend" columnName="fk_friend_id" />
+    </changeSet>
+
 </databaseChangeLog>
