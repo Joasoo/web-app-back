@@ -39,7 +39,8 @@ public class Person {
     @Column(name = "password")
     private String password;
 
-    /*todo relationship Status.*/
+    @Column(name = "rel_status")
+    private String relationshipStatus;
 
     @Column(name = "workplace")
     private String workplace;
