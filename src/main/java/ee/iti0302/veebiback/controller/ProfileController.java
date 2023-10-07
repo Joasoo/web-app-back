@@ -1,20 +1,21 @@
 package ee.iti0302.veebiback.controller;
 
+import ee.iti0302.veebiback.dto.BaseDto;
+import ee.iti0302.veebiback.dto.PostDto;
 import ee.iti0302.veebiback.dto.ProfileDataDto;
-import ee.iti0302.veebiback.service.ProfilePageService;
+import ee.iti0302.veebiback.service.ProfileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/profile")
 @RequiredArgsConstructor
-public class ProfilePageController {
-    private final ProfilePageService service;
+public class ProfileController {
+    private final ProfileService service;
     @GetMapping
-    public ProfileDataDto getProfileData(@RequestParam int id) {
+    public ProfileDataDto getProfileData(@RequestParam Long id) {
         ProfileDataDto testDto = new ProfileDataDto();
         if (id == 1) {
             testDto.setFirstName("Margus");
