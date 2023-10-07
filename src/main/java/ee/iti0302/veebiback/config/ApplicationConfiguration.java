@@ -1,5 +1,7 @@
 package ee.iti0302.veebiback.config;
 
+import ee.iti0302.veebiback.security.JWTManager;
+import ee.iti0302.veebiback.security.OAuthJWTManager;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.springframework.context.annotation.Bean;
@@ -21,5 +23,11 @@ public class ApplicationConfiguration {
                 .configure()
                 .buildValidatorFactory()
                 .getValidator();
+    }
+
+    @Bean
+    public JWTManager getJwtManager() {
+
+        return new OAuthJWTManager(null);
     }
 }
