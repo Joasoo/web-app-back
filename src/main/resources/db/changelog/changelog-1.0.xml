@@ -79,4 +79,10 @@
         <dropTable tableName="relationship_status"/>
     </changeSet>
 
+    <changeSet author="Allan Lip" id="07-10-2023 Rename posts table, change timestamp datatypes.">
+        <modifyDataType tableName="posts" columnName="created_at" newDataType="timestamp" />
+        <modifyDataType tableName="posts" columnName="edited_at" newDataType="timestamp" />
+        <renameTable oldTableName="posts" newTableName="post" />
+    </changeSet>
+
 </databaseChangeLog>
