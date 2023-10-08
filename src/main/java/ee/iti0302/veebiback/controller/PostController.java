@@ -25,7 +25,7 @@ public class PostController {
         return service.addPost(postDto);
     }
 
-    @DeleteMapping
+    @DeleteMapping(path = "/delete")
     public BaseDto deletePost(@RequestParam Long id) {
         return service.deletePost(id);
     }
