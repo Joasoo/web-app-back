@@ -1,4 +1,4 @@
-package ee.iti0302.veebiback.security;
+package ee.iti0302.veebiback.security.jwt;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -14,7 +14,7 @@ public interface JWTManager {
     /**
      * Validate the given JWT token.
      * @param token Token
-     * @return True if token is valid.
+     * @return The decoded JWT token if it's valid.
      */
-    boolean validate(@NotNull String token);
+    JWTToken validate(@NotNull String token) throws InvalidJWTTokenException;
 }

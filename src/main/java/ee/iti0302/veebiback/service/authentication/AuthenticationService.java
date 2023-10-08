@@ -5,7 +5,7 @@ import ee.iti0302.veebiback.dto.LoginDto;
 import ee.iti0302.veebiback.dto.RegisterDto;
 import ee.iti0302.veebiback.dto.TokenDto;
 import ee.iti0302.veebiback.repository.PersonRepository;
-import ee.iti0302.veebiback.security.JWTManager;
+import ee.iti0302.veebiback.security.jwt.JWTManager;
 import ee.iti0302.veebiback.service.authentication.exception.EmailInUseException;
 import ee.iti0302.veebiback.service.authentication.exception.IncorrectCredentialsException;
 import ee.iti0302.veebiback.service.mapper.PersonMapper;
