@@ -1,7 +1,6 @@
 package ee.iti0302.veebiback.config;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import ee.iti0302.veebiback.security.jwt.JWTManager;
 import ee.iti0302.veebiback.security.jwt.OAuthJWTManager;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -27,7 +26,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public JWTManager getJwtManager() {
+    public OAuthJWTManager getJwtManager() {
         Algorithm algorithm = Algorithm.HMAC256("rndsecret");
         return new OAuthJWTManager(algorithm);
     }
