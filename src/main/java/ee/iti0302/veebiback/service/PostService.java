@@ -22,7 +22,8 @@ public class PostService {
     private final PostMapper postMapper;
 
     public List<PostDto> getPostList(Long personId) {
-        List<Post> postList = postRepository.findAllByPersonId(personId);
+        List<Post> postList =
+                postRepository.findAllByPersonIdOrderByCreatedAtDesc(personId);
         return postMapper.toDtoList(postList);
     }
 
@@ -37,6 +38,11 @@ public class PostService {
         newPost.setContent(postDto.getContent());
         newPost.setPerson(person);
         postRepository.save(newPost);
+        return new BaseDto();
+    }
+
+    public BaseDto deletePost(Long id) {
+        postRepository.deleteById(id);
         return new BaseDto();
     }
 }

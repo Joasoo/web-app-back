@@ -15,19 +15,18 @@ import java.util.List;
 public class PostController {
     private final PostService service;
 
-    @GetMapping(path="/person")
+    @GetMapping(path = "/person")
     public List<PostDto> getPostList(@RequestParam Long id) {
         return service.getPostList(id);
     }
 
-    @PostMapping(path="/add")
+    @PostMapping(path = "/add")
     public BaseDto addPost(@RequestBody AddPostDto postDto) {
         return service.addPost(postDto);
     }
 
     @DeleteMapping
     public BaseDto deletePost(@RequestParam Long id) {
-        return null;
+        return service.deletePost(id);
     }
-
 }

@@ -15,7 +15,7 @@ public class ProfileDataDto {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    // private String relationshipStatus;
+    private String relationshipStatus;
     private String workplace;
     private String residence;
     private String hometown;
