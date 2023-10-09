@@ -12,5 +12,5 @@ import org.mapstruct.ReportingPolicy;
 public interface PersonMapper {
     EditProfileDataDto toEditProfileDataDto(Person entity);
     Person registerDtoToEntity(RegisterDto dto);
-    BaseDto updateProfileDataFromDto(EditProfileDataDto dto, @MappingTarget Person entity);
+    void updateProfileDataFromDto(EditProfileDataDto dto, @MappingTarget Person entity);
 }
