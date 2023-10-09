@@ -40,6 +40,7 @@ public class ProfileService {
         if (optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
             personMapper.updateProfileDataFromDto(dto, person);
+            personRepository.save(person);
         }
         return new BaseDto();
     }
