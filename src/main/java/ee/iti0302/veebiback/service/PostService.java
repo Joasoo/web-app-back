@@ -5,7 +5,7 @@ import ee.iti0302.veebiback.domain.Post;
 import ee.iti0302.veebiback.dto.AddPostDto;
 import ee.iti0302.veebiback.dto.BaseDto;
 import ee.iti0302.veebiback.dto.PostDto;
-import ee.iti0302.veebiback.mapper.PostMapper;
+import ee.iti0302.veebiback.service.mapper.PostMapper;
 import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.PostRepository;
 import lombok.RequiredArgsConstructor;

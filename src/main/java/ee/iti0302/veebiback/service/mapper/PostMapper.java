@@ -1,8 +1,7 @@
-package ee.iti0302.veebiback.mapper;
+package ee.iti0302.veebiback.service.mapper;
 
 import ee.iti0302.veebiback.domain.Post;
 import ee.iti0302.veebiback.dto.PostDto;
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -16,7 +15,4 @@ public interface PostMapper {
     @Mapping(source = "person.lastName", target = "author.lastName")
     PostDto toDto(Post entity);
     List<PostDto> toDtoList(List<Post> entityList);
-
-    @InheritInverseConfiguration
-    Post toEntity(PostDto dto);
 }
