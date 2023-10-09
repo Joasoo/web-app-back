@@ -2,7 +2,6 @@ package ee.iti0302.veebiback.controller;
 
 import ee.iti0302.veebiback.dto.BaseDto;
 import ee.iti0302.veebiback.dto.EditProfileDataDto;
-import ee.iti0302.veebiback.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
