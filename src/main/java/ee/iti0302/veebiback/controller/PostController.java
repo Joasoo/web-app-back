@@ -13,20 +13,20 @@ import java.util.List;
 @RequestMapping("api/post")
 @RequiredArgsConstructor
 public class PostController {
-    private final PostService service;
+    private final PostService postService;
 
     @GetMapping(path = "/person/{id}")
     public List<PostDto> getPostList(@PathVariable Long id) {
-        return service.getPostList(id);
+        return postService.getPostList(id);
     }
 
     @PostMapping(path = "/add")
     public BaseDto addPost(@RequestBody AddPostDto postDto) {
-        return service.addPost(postDto);
+        return postService.addPost(postDto);
     }
 
     @DeleteMapping(path = "/delete/{id}")
     public BaseDto deletePost(@PathVariable Long id) {
-        return service.deletePost(id);
+        return postService.deletePost(id);
     }
 }

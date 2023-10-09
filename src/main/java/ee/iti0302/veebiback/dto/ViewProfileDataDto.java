@@ -11,7 +11,8 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfileDataDto {
+public class ViewProfileDataDto {
+    private Long id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
