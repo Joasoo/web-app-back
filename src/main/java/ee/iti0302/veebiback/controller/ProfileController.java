@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
     private final ProfileService service;
 
-    @GetMapping
-    public ProfileDataDto getProfileData(@RequestParam Long id) {
+    @GetMapping("/{id}")
+    public ProfileDataDto getProfileData(@PathVariable Long id) {
         return service.getProfileData(id);
     }
 }
