@@ -2,7 +2,7 @@ package ee.iti0302.veebiback.service.mapper;
 
 import ee.iti0302.veebiback.domain.Person;
 import ee.iti0302.veebiback.dto.EditProfileDataDto;
-import ee.iti0302.veebiback.dto.ProfileDataDto;
+import ee.iti0302.veebiback.dto.ViewProfileDataDto;
 import ee.iti0302.veebiback.dto.RegisterDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -13,5 +13,5 @@ public interface PersonMapper {
     EditProfileDataDto toEditProfileDataDto(Person entity);
     Person registerDtoToEntity(RegisterDto dto);
     void updateProfileDataFromDto(EditProfileDataDto dto, @MappingTarget Person entity);
-    ProfileDataDto entityToProfileDataDto(Person entity);
+    ViewProfileDataDto entityToProfileDataDto(Person entity);
 }

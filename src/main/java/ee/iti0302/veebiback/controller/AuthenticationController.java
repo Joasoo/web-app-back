@@ -4,7 +4,7 @@ import ee.iti0302.veebiback.dto.BaseDto;
 import ee.iti0302.veebiback.dto.LoginDto;
 import ee.iti0302.veebiback.dto.RegisterDto;
 import ee.iti0302.veebiback.dto.TokenDto;
-import ee.iti0302.veebiback.service.authentication.AuthenticationService;
+import ee.iti0302.veebiback.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

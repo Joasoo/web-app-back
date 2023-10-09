@@ -1,4 +1,4 @@
-package ee.iti0302.veebiback.service.authentication;
+package ee.iti0302.veebiback.service;
 
 import ee.iti0302.veebiback.dto.BaseDto;
 import ee.iti0302.veebiback.dto.LoginDto;

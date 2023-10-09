@@ -12,11 +12,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EditProfileDataDto {
+    private Long id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
     private String email;
-    // private String relationshipStatus;
+    private String relationshipStatus;
     private String residence;
     private String hometown;
     private String workplace;
