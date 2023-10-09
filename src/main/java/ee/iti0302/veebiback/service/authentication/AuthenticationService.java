@@ -3,9 +3,11 @@ package ee.iti0302.veebiback.service.authentication;
 import ee.iti0302.veebiback.dto.BaseDto;
 import ee.iti0302.veebiback.dto.LoginDto;
 import ee.iti0302.veebiback.dto.RegisterDto;
+import ee.iti0302.veebiback.dto.TokenDto;
 import ee.iti0302.veebiback.repository.PersonRepository;
-import ee.iti0302.veebiback.service.authentication.exception.EmailInUseException;
-import ee.iti0302.veebiback.service.authentication.exception.IncorrectCredentialsException;
+import ee.iti0302.veebiback.security.jwt.OAuthJWTManager;
+import ee.iti0302.veebiback.util.exception.EmailInUseException;
+import ee.iti0302.veebiback.util.exception.IncorrectCredentialsException;
 import ee.iti0302.veebiback.service.mapper.PersonMapper;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class AuthenticationService {
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
     private final Validator validator; /*todo for later*/
+    private final OAuthJWTManager jwtManager;
 
     public BaseDto registerUser(RegisterDto dto) {
         if (accountWithEmailExists(dto.getEmail())) {
@@ -32,14 +35,13 @@ public class AuthenticationService {
         return new BaseDto();
     }
 
-    public BaseDto loginUser(LoginDto dto) {
+    public TokenDto loginUser(LoginDto dto) {
         var person = personRepository.findByEmail(dto.getEmail());
         if (person.isEmpty()
                 || !encoder.matches(dto.getPassword(), person.get().getPassword())) {
             throw new IncorrectCredentialsException("Incorrect e-mail or password.");
         }
-        return new BaseDto();
-        /*todo return token.*/
+        return new TokenDto(jwtManager.generate(person.get().getId()));
     }
 
     private boolean accountWithEmailExists(String email) {
