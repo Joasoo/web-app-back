@@ -15,8 +15,8 @@ import java.util.List;
 public class PostController {
     private final PostService service;
 
-    @GetMapping(path = "/person")
-    public List<PostDto> getPostList(@RequestParam Long id) {
+    @GetMapping(path = "/person/{id}")
+    public List<PostDto> getPostList(@PathVariable Long id) {
         return service.getPostList(id);
     }
 
@@ -25,8 +25,8 @@ public class PostController {
         return service.addPost(postDto);
     }
 
-    @DeleteMapping(path = "/delete")
-    public BaseDto deletePost(@RequestParam Long id) {
+    @DeleteMapping(path = "/delete/{id}")
+    public BaseDto deletePost(@PathVariable Long id) {
         return service.deletePost(id);
     }
 }
