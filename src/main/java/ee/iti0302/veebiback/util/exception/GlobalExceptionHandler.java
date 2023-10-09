@@ -17,7 +17,7 @@ public final class GlobalExceptionHandler {
 
 
     @ExceptionHandler({EmailInUseException.class, IncorrectCredentialsException.class})
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public @ResponseBody RestError handleAuthException(ServletWebRequest req, GenericRestException ex) {
         return new RestError(req.getRequest().getRequestURI(), ex.getTimestamp(), ex.getMessage());
     }
