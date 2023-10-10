@@ -8,5 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class TokenDto {
+    private Long id;
     private String token;
 }
