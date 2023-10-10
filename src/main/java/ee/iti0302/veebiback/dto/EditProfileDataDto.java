@@ -17,7 +17,7 @@ public class EditProfileDataDto {
     private String lastName;
     private LocalDate dateOfBirth;
     private String email;
-    private String relationshipStatus;
+    private StatusCodeDto relationshipStatus;
     private String residence;
     private String hometown;
     private String workplace;
