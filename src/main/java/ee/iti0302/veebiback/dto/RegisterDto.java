@@ -22,7 +22,7 @@ public class RegisterDto {
 
     private String password;
 
-    private String relationshipStatus;
+    private StatusCodeDto relationshipStatus;
 
     private String workplace;
 

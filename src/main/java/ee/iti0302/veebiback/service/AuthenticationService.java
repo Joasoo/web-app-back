@@ -41,7 +41,7 @@ public class AuthenticationService {
                 || !encoder.matches(dto.getPassword(), person.get().getPassword())) {
             throw new IncorrectCredentialsException("Incorrect e-mail or password.");
         }
-        return new TokenDto(jwtManager.generate(person.get().getId()));
+        return new TokenDto(person.get().getId(), jwtManager.generate(person.get().getId()));
     }
 
     private boolean accountWithEmailExists(String email) {
