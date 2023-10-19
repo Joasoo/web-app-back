@@ -49,6 +49,7 @@ public class FriendshipService {
 
 
         if (optionalPerson.isPresent() && optionalFriend.isPresent()) {
+            // Make a new friend request
             Friendship friendship = new Friendship();
             friendship.setPerson(optionalPerson.get());
             friendship.setFriend(optionalFriend.get());
@@ -59,13 +60,14 @@ public class FriendshipService {
             Optional<Friendship> optionalExistingRequest =
                     friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
 
-            // Check if friend has also made a request to you just in case (same time?)
+            // Check if friend has also made a request to you just in case (same time?) => Make them friends
             if (optionalExistingRequest.isPresent()) {
                 Friendship existingRequest = optionalExistingRequest.get();
                 existingRequest.setConfirmed(true);
                 friendshipRepository.save(existingRequest);
                 friendship.setConfirmed(true);
             } else {
+                // Leave it as a request
                 friendship.setConfirmed(false);
             }
 
@@ -84,6 +86,7 @@ public class FriendshipService {
 
         // Check it both ways, so it doesn't matter which way person and friend are sent in DTO.
         if (requestFromPerson.isPresent()) {
+            // Confirm the initial request
             Friendship friendship = requestFromPerson.get();
             friendship.setConfirmed(true);
 
@@ -94,6 +97,7 @@ public class FriendshipService {
             friendshipRepository.save(newFriendship);
 
         } else if (requestFromFriend.isPresent()) {
+            // Confirm the initial request
             Friendship friendship = requestFromFriend.get();
             friendship.setConfirmed(true);
 
