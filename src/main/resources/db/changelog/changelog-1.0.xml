@@ -113,7 +113,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet author="Markus Joasoo" id="19.10.2023 Add confirmed column to person_friend table for friend requests">
+    <changeSet id="19.10.2023 Add confirmed column to person_friend table for friend requests" author="Markus Joasoo">
         <addColumn tableName="person_friend">
             <column type="boolean" name="confirmed" remarks="Friend request confirmation">
                 <constraints nullable="false"/>
