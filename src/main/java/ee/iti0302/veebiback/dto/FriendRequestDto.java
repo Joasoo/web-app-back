@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class FriendRequestDto {
-    private PersonFullNameDto person;
-    private PersonFullNameDto friend;
+    private Long personId;
+    private Long friendId;
 }

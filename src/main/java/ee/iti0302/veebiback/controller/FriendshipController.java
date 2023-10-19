@@ -21,20 +21,14 @@ public class FriendshipController {
     }
 
     @Transactional
-    @PostMapping(path="/request/make")
+    @PostMapping(path="/add")
     public BaseDto makeFriendRequest(@RequestBody FriendRequestDto request) {
-        return friendshipService.makeFriendRequest(request);
+        return friendshipService.addFriend(request);
     }
 
     @Transactional
-    @DeleteMapping(path="/request/cancel")
+    @DeleteMapping(path="/remove")
     public BaseDto cancelFriendRequest(@RequestBody FriendRequestDto request) {
-        return friendshipService.cancelFriendRequest(request);
-    }
-
-    @Transactional
-    @PostMapping(path="/request/accept")
-    public BaseDto acceptFriendRequest(@RequestBody FriendRequestDto request) {
-        return friendshipService.acceptFriendRequest(request);
+        return friendshipService.removeFriendship(request);
     }
 }

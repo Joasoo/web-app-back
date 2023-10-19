@@ -21,8 +21,8 @@ public class FriendshipService {
     private final FriendshipMapper friendshipMapper;
 
     public FriendshipDto getFriendshipStatus(FriendRequestDto dto) {
-        Long personId = dto.getPerson().getId();
-        Long friendId = dto.getFriend().getId();
+        Long personId = dto.getPersonId();
+        Long friendId = dto.getFriendId();
         Optional<Friendship> personToFriendRequest =
                 friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
         Optional<Friendship> friendToPersonRequest =
@@ -43,13 +43,13 @@ public class FriendshipService {
         return new FriendshipDto();
     }
 
-    public BaseDto makeFriendRequest(FriendRequestDto request) {
-        Optional<Person> optionalPerson = personRepository.findById(request.getPerson().getId());
-        Optional<Person> optionalFriend = personRepository.findById(request.getPerson().getId());
+    public BaseDto addFriend(FriendRequestDto request) {
+        Optional<Person> optionalPerson = personRepository.findById(request.getPersonId());
+        Optional<Person> optionalFriend = personRepository.findById(request.getFriendId());
 
 
         if (optionalPerson.isPresent() && optionalFriend.isPresent()) {
-            // Make a new friend request
+            // Make a new friendship
             Friendship friendship = new Friendship();
             friendship.setPerson(optionalPerson.get());
             friendship.setFriend(optionalFriend.get());
@@ -60,7 +60,7 @@ public class FriendshipService {
             Optional<Friendship> optionalExistingRequest =
                     friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
 
-            // Check if friend has also made a request to you just in case (same time?) => Make them friends
+            // Check if friend has also made a request to you => Make them friends
             if (optionalExistingRequest.isPresent()) {
                 Friendship existingRequest = optionalExistingRequest.get();
                 existingRequest.setConfirmed(true);
@@ -77,8 +77,8 @@ public class FriendshipService {
     }
 
     public BaseDto acceptFriendRequest(FriendRequestDto request) {
-        Long personId = request.getPerson().getId();
-        Long friendId = request.getFriend().getId();
+        Long personId = request.getPersonId();
+        Long friendId = request.getFriendId();
         Optional<Friendship> requestFromPerson =
                 friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
         Optional<Friendship> requestFromFriend =
@@ -111,24 +111,19 @@ public class FriendshipService {
         return new BaseDto();
     }
 
-    public BaseDto cancelFriendRequest(FriendRequestDto request) {
-        Optional<Person> optionalPerson = personRepository.findById(request.getPerson().getId());
-        Optional<Person> optionalFriend = personRepository.findById(request.getFriend().getId());
+    public BaseDto removeFriendship(FriendRequestDto request) {
+        // Check it both ways (cancel own request or decline other request)
+        Long personId = request.getPersonId();
+        Long friendId = request.getFriendId();
 
-        if (optionalPerson.isPresent() && optionalFriend.isPresent()) {
-            Long personId = optionalPerson.get().getId();
-            Long friendId = optionalFriend.get().getId();
+        Optional<Friendship> personRequest =
+                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
+        Optional<Friendship> friendRequest =
+                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
 
-            // Check it both ways (cancel own request or decline other request)
-            Optional<Friendship> personRequest =
-                    friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
-            Optional<Friendship> friendRequest =
-                    friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
-
-            // Delete the request
-            personRequest.ifPresent(friendshipRepository::delete);
-            friendRequest.ifPresent(friendshipRepository::delete);
-        }
+        // Delete the request
+        personRequest.ifPresent(friendshipRepository::delete);
+        friendRequest.ifPresent(friendshipRepository::delete);
 
         return new BaseDto();
     }
