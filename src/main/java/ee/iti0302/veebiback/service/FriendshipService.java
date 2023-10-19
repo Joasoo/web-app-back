@@ -3,6 +3,7 @@ package ee.iti0302.veebiback.service;
 import ee.iti0302.veebiback.domain.Friendship;
 import ee.iti0302.veebiback.domain.Person;
 import ee.iti0302.veebiback.dto.BaseDto;
+import ee.iti0302.veebiback.dto.FriendRequestDto;
 import ee.iti0302.veebiback.dto.FriendshipDto;
 import ee.iti0302.veebiback.repository.FriendshipRepository;
 import ee.iti0302.veebiback.repository.PersonRepository;
@@ -19,7 +20,7 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
     private final FriendshipMapper friendshipMapper;
 
-    public FriendshipDto getFriendshipStatus(FriendshipDto dto) {
+    public FriendshipDto getFriendshipStatus(FriendRequestDto dto) {
         Long personId = dto.getPerson().getId();
         Long friendId = dto.getFriend().getId();
         Optional<Friendship> personToFriendRequest =
@@ -42,7 +43,7 @@ public class FriendshipService {
         return new FriendshipDto();
     }
 
-    public BaseDto makeFriendRequest(FriendshipDto request) {
+    public BaseDto makeFriendRequest(FriendRequestDto request) {
         Optional<Person> optionalPerson = personRepository.findById(request.getPerson().getId());
         Optional<Person> optionalFriend = personRepository.findById(request.getPerson().getId());
 
@@ -73,7 +74,7 @@ public class FriendshipService {
         return new BaseDto();
     }
 
-    public BaseDto acceptFriendRequest(FriendshipDto request) {
+    public BaseDto acceptFriendRequest(FriendRequestDto request) {
         Long personId = request.getPerson().getId();
         Long friendId = request.getFriend().getId();
         Optional<Friendship> requestFromPerson =
@@ -106,7 +107,7 @@ public class FriendshipService {
         return new BaseDto();
     }
 
-    public BaseDto cancelFriendRequest(FriendshipDto request) {
+    public BaseDto cancelFriendRequest(FriendRequestDto request) {
         Optional<Person> optionalPerson = personRepository.findById(request.getPerson().getId());
         Optional<Person> optionalFriend = personRepository.findById(request.getFriend().getId());
 
