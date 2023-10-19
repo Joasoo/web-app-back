@@ -91,4 +91,12 @@
         <addNotNullConstraint tableName="person_friend" columnName="fk_friend_id" />
     </changeSet>
 
+    <changeSet author="Markus Joasoo" id="19.10.2023 Add confirmed column to person_friend table for friend requests">
+        <addColumn tableName="person_friend">
+            <column type="boolean" name="confirmed" remarks="Friend request confirmation">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
