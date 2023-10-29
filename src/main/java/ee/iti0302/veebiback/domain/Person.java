@@ -39,9 +39,6 @@ public class Person {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "rel_status")
-    private String relationshipStatus;
-
     @Column(name = "workplace")
     private String workplace;
 
@@ -50,4 +47,8 @@ public class Person {
 
     @Column(name = "hometown")
     private String hometown;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_code_rel_status")
+    private StatusCode relationshipStatus;
 }

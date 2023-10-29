@@ -16,7 +16,7 @@ public class ViewProfileDataDto {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private String relationshipStatus;
+    private StatusCodeDto relationshipStatus;
     private String workplace;
     private String residence;
     private String hometown;
