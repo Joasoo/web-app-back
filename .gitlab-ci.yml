@@ -19,7 +19,7 @@ deploy iti0302-2023-backend:
     stage: deploy
     only:
         refs:
-            develop
+            - develop
     tags:
         - main
     script:
