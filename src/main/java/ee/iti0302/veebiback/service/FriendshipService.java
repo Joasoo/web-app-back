@@ -20,9 +20,7 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
     private final FriendshipMapper friendshipMapper;
 
-    public FriendshipDto getFriendshipStatus(FriendRequestDto dto) {
-        Long personId = dto.getPersonId();
-        Long friendId = dto.getFriendId();
+    public FriendshipDto getFriendshipStatus(Long personId, Long friendId) {
         Optional<Friendship> personToFriendRequest =
                 friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
         Optional<Friendship> friendToPersonRequest =
@@ -111,11 +109,8 @@ public class FriendshipService {
         return new BaseDto();
     }
 
-    public BaseDto removeFriendship(FriendRequestDto request) {
+    public BaseDto removeFriendship(Long personId, Long friendId) {
         // Check it both ways (cancel own request or decline other request)
-        Long personId = request.getPersonId();
-        Long friendId = request.getFriendId();
-
         Optional<Friendship> personRequest =
                 friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
         Optional<Friendship> friendRequest =
