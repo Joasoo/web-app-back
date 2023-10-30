@@ -1,0 +1,29 @@
+stages:
+    - build
+    - deploy
+
+
+build iti0302-2023-backend:
+    stage: build
+    only:
+        refs:  # Milliste branchida peal runida
+            - develop
+    tags:  # Mis tagi kasutad gitlab runneris (?)
+        - main
+    script:
+        - ./gradlew clean build
+        - docker build -t iti0302-2023-backend .
+        # idee järgi docker push (aga me saame ilma)
+    
+deploy iti0302-2023-backend:
+    stage: deploy
+    only:
+        refs:
+            develop
+    tags:
+        - main
+    script:
+        # Kuna samas serveris, siis cd õigesse kausta, docker compuse down ja up
+        - cd server
+        - docker-compose down
+        - docker-compose up -d
