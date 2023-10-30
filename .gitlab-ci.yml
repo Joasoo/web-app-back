@@ -8,7 +8,7 @@ build iti0302-2023-backend:
     only:
         refs:  # Milliste branchida peal runida
             - develop
-    tags:  # Mis tagi kasutad gitlab runneris (?)
+    tags:  # Mis tagi kasutad gitlab runneris (?) | -tag imine docker pushiga (?)
         - main
     script:
         - ./gradlew clean build
