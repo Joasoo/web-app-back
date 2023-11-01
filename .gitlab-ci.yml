@@ -3,7 +3,7 @@ stages:
     - deploy
 
 
-build iti0302-2023-backend:
+build:
     stage: build
     only:
         refs:  # Milliste branchida peal runida
@@ -16,7 +16,7 @@ build iti0302-2023-backend:
         # - docker build -t iti0302-2023-backend .
         # idee järgi docker push (aga me saame ilma)
     
-deploy iti0302-2023-backend:
+deploy:
     stage: deploy
     only:
         refs:
