@@ -12,9 +12,8 @@ build:
         - main
     script:
         - echo "Running build script.."
-        - ls
-        # - ./gradlew clean build
-        # - docker build -t veebi-java .
+        - ./gradlew clean build
+        - docker build -t veebi-java .
         # idee järgi docker push (aga me saame ilma)
     
 deploy:
@@ -27,6 +26,6 @@ deploy:
     script:
         - echo "Running deploy script.."
         # Kuna samas serveris, siis cd õigesse kausta, docker compuse down ja up
-        # - cd ./server
-        # - docker-compose down
-        # - docker-compose up -d
+        - cd ~/server
+        - docker-compose down
+        - docker-compose up -d
