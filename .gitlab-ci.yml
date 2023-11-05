@@ -2,6 +2,9 @@ stages:
     - build
     - deploy
 
+variables:
+    # gitlab-runner's root directory.
+    SERVER_PATH: "/opt/server"
 
 build:
     stage: build
@@ -12,7 +15,7 @@ build:
         - main
     script:
         - echo "Running build script.."
-        - chmod -R g+x .
+        - chmod -R g+x $SERVER_PATH
         - ./gradlew clean build
         - docker build -t veebi-java .
         # idee järgi docker push (aga me saame ilma)
@@ -27,6 +30,6 @@ deploy:
     script:
         - echo "Running deploy script.."
         # Kuna samas serveris, siis cd õigesse kausta, docker compuse down ja up
-        - cd /opt/server
+        - cd $SERVER_PATH
         - docker-compose down
         - docker-compose up -d
