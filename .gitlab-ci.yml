@@ -12,6 +12,7 @@ build:
         - main
     script:
         - echo "Running build script.."
+        - ls
         # - ./gradlew clean build
         # - docker build -t veebi-java .
         # idee järgi docker push (aga me saame ilma)
