@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:20.04
 LABEL authors="allan"
 ADD /build/libs/veebi-back-0.0.1-SNAPSHOT.jar /app/app.jar
 ADD /src/main/resources/application.properties /app/config/application.properties
