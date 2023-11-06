@@ -6,9 +6,9 @@
 - Profiili andmete muutmine
 - Postitused
 - Newsfeed (sõprade postitused sorteeritud aja järgi)
-- Grupid
-- Üritused
-- Live chat (hiljem)
+- Grupid (?)
+- Üritused (?)
+- Live chat (?)
 
 
 ### Kuidas tööle panna
