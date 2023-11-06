@@ -8,7 +8,9 @@ import ee.iti0302.veebiback.dto.FriendRequestDto;
 import ee.iti0302.veebiback.dto.FriendshipDto;
 import ee.iti0302.veebiback.repository.FriendshipRepository;
 import ee.iti0302.veebiback.repository.PersonRepository;
+import ee.iti0302.veebiback.repository.StatusCodeRepository;
 import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
+import ee.iti0302.veebiback.util.enums.FriendshipStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,7 @@ public class FriendshipService {
     private final PersonRepository personRepository;
     private final FriendshipRepository friendshipRepository;
     private final FriendshipMapper friendshipMapper;
+    private final StatusCodeRepository statusCodeRepository;
 
     public FriendshipDto getFriendshipStatus(Long personId, Long friendId) {
         Optional<Friendship> personToFriendRequest =
@@ -65,12 +68,14 @@ public class FriendshipService {
             // Check if friend has also made a request to you => Make them friends
             if (optionalExistingRequest.isPresent()) {
                 Friendship existingRequest = optionalExistingRequest.get();
-                existingRequest.setConfirmed(true);
+                var statusCodeOptional = statusCodeRepository.findByCode(FriendshipStatus.FR_STATUS_A.name());
+                existingRequest.setStatus(statusCodeOptional.orElseThrow());
                 friendshipRepository.save(existingRequest);
-                friendship.setConfirmed(true);
+                friendship.setStatus(statusCodeOptional.orElseThrow());
             } else {
+                var statusCodeOptional = statusCodeRepository.findByCode(FriendshipStatus.FR_STATUS_S.name());
                 // Leave it as a request
-                friendship.setConfirmed(false);
+                friendship.setStatus(statusCodeOptional.orElseThrow());
             }
 
             friendshipRepository.save(friendship);
@@ -85,12 +90,15 @@ public class FriendshipService {
                 friendshipRepository.findFriendshipByPersonIdAndFriendId(personId, friendId);
         Optional<Friendship> requestFromFriend =
                 friendshipRepository.findFriendshipByPersonIdAndFriendId(friendId, personId);
+        var statusCodeA = statusCodeRepository
+                .findByCode(FriendshipStatus.FR_STATUS_A.name())
+                .orElseThrow();
 
         // Check it both ways, so it doesn't matter which way person and friend are sent in DTO.
         if (requestFromPerson.isPresent()) {
             // Confirm the initial request
             Friendship friendship = requestFromPerson.get();
-            friendship.setConfirmed(true);
+            friendship.setStatus(statusCodeA);
 
             // Create a new friendship for the other person (who accepted the request)
             Friendship newFriendship = createFriendship(friendship.getFriend(), friendship.getPerson());
@@ -101,7 +109,7 @@ public class FriendshipService {
         } else if (requestFromFriend.isPresent()) {
             // Confirm the initial request
             Friendship friendship = requestFromFriend.get();
-            friendship.setConfirmed(true);
+            friendship.setStatus(statusCodeA);
 
             // Create a new friendship for the other person (who accepted the request)
             Friendship newFriendship = createFriendship(friendship.getPerson(), friendship.getFriend());
@@ -134,11 +142,12 @@ public class FriendshipService {
         }
 
         for (var relation : friendshipRelations) {
-
+            /*todo*/
         }
+        return List.of();
     }
 
-        private Friendship createFriendship(Person person, Person friend) {
+    private Friendship createFriendship(Person person, Person friend) {
         Friendship friendship = new Friendship();
         friendship.setPerson(person);
         friendship.setFriend(friend);
