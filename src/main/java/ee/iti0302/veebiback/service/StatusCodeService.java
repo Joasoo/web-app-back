@@ -3,7 +3,7 @@ package ee.iti0302.veebiback.service;
 import ee.iti0302.veebiback.dto.StatusCodeDto;
 import ee.iti0302.veebiback.repository.StatusCodeRepository;
 import ee.iti0302.veebiback.service.mapper.StatusCodeMapper;
-import ee.iti0302.veebiback.util.StatusCodeClass;
+import ee.iti0302.veebiback.util.enums.StatusCodeClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

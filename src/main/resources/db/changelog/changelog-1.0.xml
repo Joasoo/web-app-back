@@ -121,4 +121,17 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="06-11-2023 Add status codes for friend requests" author="Allan Lip">
+        <dropColumn tableName="person_friend" columnName="confirmed"/>
+        <addColumn tableName="person_friend">
+            <column type="text" name="fk_friend_status" remarks="Status of the friendship relation">
+                <constraints  nullable="false" foreignKeyName="fk_friend_status" references="status_code(code)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="06-11-2023 Run sql for status codes" author="Allan Lip">
+        <sqlFile path="db/sql/status_codes.sql" />
+    </changeSet>
+
 </databaseChangeLog>

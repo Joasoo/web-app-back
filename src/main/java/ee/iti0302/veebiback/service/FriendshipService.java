@@ -3,6 +3,7 @@ package ee.iti0302.veebiback.service;
 import ee.iti0302.veebiback.domain.Friendship;
 import ee.iti0302.veebiback.domain.Person;
 import ee.iti0302.veebiback.dto.BaseDto;
+import ee.iti0302.veebiback.dto.FriendListDto;
 import ee.iti0302.veebiback.dto.FriendRequestDto;
 import ee.iti0302.veebiback.dto.FriendshipDto;
 import ee.iti0302.veebiback.repository.FriendshipRepository;
@@ -10,7 +11,10 @@ import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,9 +26,9 @@ public class FriendshipService {
 
     public FriendshipDto getFriendshipStatus(Long personId, Long friendId) {
         Optional<Friendship> personToFriendRequest =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
+                friendshipRepository.findFriendshipByPersonIdAndFriendId(personId, friendId);
         Optional<Friendship> friendToPersonRequest =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
+                friendshipRepository.findFriendshipByPersonIdAndFriendId(friendId, personId);
         // They are already friends
         if (personToFriendRequest.isPresent() && friendToPersonRequest.isPresent()) {
             return friendshipMapper.toDto(personToFriendRequest.get());
@@ -56,7 +60,7 @@ public class FriendshipService {
             Long friendId = optionalFriend.get().getId();
 
             Optional<Friendship> optionalExistingRequest =
-                    friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
+                    friendshipRepository.findFriendshipByPersonIdAndFriendId(friendId, personId);
 
             // Check if friend has also made a request to you => Make them friends
             if (optionalExistingRequest.isPresent()) {
@@ -78,9 +82,9 @@ public class FriendshipService {
         Long personId = request.getPersonId();
         Long friendId = request.getFriendId();
         Optional<Friendship> requestFromPerson =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
+                friendshipRepository.findFriendshipByPersonIdAndFriendId(personId, friendId);
         Optional<Friendship> requestFromFriend =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
+                friendshipRepository.findFriendshipByPersonIdAndFriendId(friendId, personId);
 
         // Check it both ways, so it doesn't matter which way person and friend are sent in DTO.
         if (requestFromPerson.isPresent()) {
@@ -112,9 +116,9 @@ public class FriendshipService {
     public BaseDto removeFriendship(Long personId, Long friendId) {
         // Check it both ways (cancel own request or decline other request)
         Optional<Friendship> personRequest =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
+                friendshipRepository.findFriendshipByPersonIdAndFriendId(personId, friendId);
         Optional<Friendship> friendRequest =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
+                friendshipRepository.findFriendshipByPersonIdAndFriendId(friendId, personId);
 
         // Delete the request
         personRequest.ifPresent(friendshipRepository::delete);
@@ -123,8 +127,18 @@ public class FriendshipService {
         return new BaseDto();
     }
 
+    public List<FriendListDto> getFriendsList(Long personId) {
+        var friendshipRelations = friendshipRepository.findFriendshipsByPersonId(personId);
+        if (friendshipRelations.isEmpty()) {
+            return new ArrayList<>();
+        }
 
-    private Friendship createFriendship(Person person, Person friend) {
+        for (var relation : friendshipRelations) {
+
+        }
+    }
+
+        private Friendship createFriendship(Person person, Person friend) {
         Friendship friendship = new Friendship();
         friendship.setPerson(person);
         friendship.setFriend(friend);

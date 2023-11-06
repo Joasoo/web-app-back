@@ -26,5 +26,7 @@ public class Friendship {
     private Person friend;
 
     @NotNull
-    private boolean confirmed;
+    @ManyToOne
+    @JoinColumn(name = "fk_friend_status")
+    private StatusCode status;
 }
