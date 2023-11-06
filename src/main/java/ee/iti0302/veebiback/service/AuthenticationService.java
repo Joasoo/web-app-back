@@ -9,7 +9,6 @@ import ee.iti0302.veebiback.security.jwt.OAuthJWTManager;
 import ee.iti0302.veebiback.util.exception.EmailInUseException;
 import ee.iti0302.veebiback.util.exception.IncorrectCredentialsException;
 import ee.iti0302.veebiback.service.mapper.PersonMapper;
-import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ public class AuthenticationService {
     private final PasswordEncoder encoder;
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
-    private final Validator validator; /*todo for later*/
     private final OAuthJWTManager jwtManager;
 
     public BaseDto registerUser(RegisterDto dto) {

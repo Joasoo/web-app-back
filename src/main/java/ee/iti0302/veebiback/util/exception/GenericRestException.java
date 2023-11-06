@@ -2,7 +2,6 @@ package ee.iti0302.veebiback.util.exception;
 
 
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
