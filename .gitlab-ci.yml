@@ -33,5 +33,5 @@ deploy:
         - docker pull $REPO_PATH
         # Kuna samas serveris, siis cd õigesse kausta, docker compuse down ja up
         - cd $SERVER_PATH
-        - docker-compose -f ./docker-compose-back.yml down
-        - docker-compose -f ./docker-compose-back.yml up -d
+        - docker-compose down
+        - docker-compose up -d
