@@ -33,7 +33,7 @@ public class FriendshipController {
         return friendshipService.removeFriendship(personId, friendId);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/all/{id}")
     public List<FriendListDto> getFriendsList(@PathVariable Long id) {
         return friendshipService.getFriendsList(id);
     }

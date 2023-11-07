@@ -2,22 +2,22 @@ package ee.iti0302.veebiback.service;
 
 import ee.iti0302.veebiback.domain.Friendship;
 import ee.iti0302.veebiback.domain.Person;
-import ee.iti0302.veebiback.dto.BaseDto;
-import ee.iti0302.veebiback.dto.FriendListDto;
-import ee.iti0302.veebiback.dto.FriendRequestDto;
-import ee.iti0302.veebiback.dto.FriendshipDto;
+import ee.iti0302.veebiback.dto.*;
 import ee.iti0302.veebiback.repository.FriendshipRepository;
 import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.StatusCodeRepository;
 import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
+import ee.iti0302.veebiback.service.mapper.StatusCodeMapper;
 import ee.iti0302.veebiback.util.enums.FriendshipStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_A;
+import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_S;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +26,7 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
     private final FriendshipMapper friendshipMapper;
     private final StatusCodeRepository statusCodeRepository;
+    private final StatusCodeMapper statusCodeMapper;
 
     public FriendshipDto getFriendshipStatus(Long personId, Long friendId) {
         Optional<Friendship> personToFriendRequest =
@@ -68,7 +69,7 @@ public class FriendshipService {
             // Check if friend has also made a request to you => Make them friends
             if (optionalExistingRequest.isPresent()) {
                 Friendship existingRequest = optionalExistingRequest.get();
-                var statusCodeOptional = statusCodeRepository.findByCode(FriendshipStatus.FR_STATUS_A.name());
+                var statusCodeOptional = statusCodeRepository.findByCode(FR_STATUS_A.name());
                 existingRequest.setStatus(statusCodeOptional.orElseThrow());
                 friendshipRepository.save(existingRequest);
                 friendship.setStatus(statusCodeOptional.orElseThrow());
@@ -91,7 +92,7 @@ public class FriendshipService {
         Optional<Friendship> requestFromFriend =
                 friendshipRepository.findFriendshipByPersonIdAndFriendId(friendId, personId);
         var statusCodeA = statusCodeRepository
-                .findByCode(FriendshipStatus.FR_STATUS_A.name())
+                .findByCode(FR_STATUS_A.name())
                 .orElseThrow();
 
         // Check it both ways, so it doesn't matter which way person and friend are sent in DTO.
@@ -137,14 +138,30 @@ public class FriendshipService {
 
     public List<FriendListDto> getFriendsList(Long personId) {
         var friendshipRelations = friendshipRepository.findFriendshipsByPersonId(personId);
+        /*
+        Valid relations (shown on the front-end) are the ones with FR_STATUS_A or FR_STATUS_S
+        since we don't show blocked people in friend's list.
+        */
+        var validRelations = new ArrayList<FriendListDto>();
         if (friendshipRelations.isEmpty()) {
             return new ArrayList<>();
         }
 
         for (var relation : friendshipRelations) {
-            /*todo*/
+            var status = statusCodeMapper.toDto(relation.getStatus());
+            if (List.of(FR_STATUS_A.name(), FR_STATUS_S.name())
+                    .contains(status.getCode())) {
+                var friend = relation.getFriend();
+                var fullName = new FullNameDto(friend.getFirstName(), friend.getLastName());
+
+                var friendListDto = new FriendListDto();
+                friendListDto.setId(friend.getId());
+                friendListDto.setName(fullName);
+                friendListDto.setStatus(status);
+                validRelations.add(friendListDto);
+            }
         }
-        return List.of();
+        return validRelations;
     }
 
     private Friendship createFriendship(Person person, Person friend) {
