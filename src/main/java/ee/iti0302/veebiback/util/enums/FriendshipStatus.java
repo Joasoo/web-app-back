@@ -13,5 +13,8 @@ public enum FriendshipStatus {
      * Accepted
      */
     FR_STATUS_A,
-
+    /**
+     * Received
+     */
+    FR_STATUS_R
 }
