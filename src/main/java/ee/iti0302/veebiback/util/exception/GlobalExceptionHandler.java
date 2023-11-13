@@ -10,16 +10,21 @@ import org.springframework.web.context.request.ServletWebRequest;
 @ControllerAdvice
 public final class GlobalExceptionHandler {
 
-    @ExceptionHandler({GenericRestException.class})
-    public @ResponseBody RestError handleGenericException(ServletWebRequest req, GenericRestException ex) {
-        return new RestError(req.getRequest().getRequestURI(), ex.getTimestamp(), ex.getMessage());
+    @ExceptionHandler({RuntimeException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public @ResponseBody ExceptionResponse handleRuntimeException(ServletWebRequest req, RuntimeException ex) {
+        ex.printStackTrace();
+        return new ExceptionResponse(req.getRequest().getRequestURI(), ex.getMessage());
     }
-
 
     @ExceptionHandler({EmailInUseException.class, IncorrectCredentialsException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public @ResponseBody RestError handleAuthException(ServletWebRequest req, GenericRestException ex) {
-        return new RestError(req.getRequest().getRequestURI(), ex.getTimestamp(), ex.getMessage());
+    public @ResponseBody ExceptionResponse handleAuthException(ServletWebRequest req, RuntimeException ex) {
+        return new ExceptionResponse(req.getRequest().getRequestURI(), ex.getMessage());
     }
 
+    /* todo:
+    *   - For client caused exceptions: HttpStatus.BAD_REQUEST
+    *   - Need to catch Hibernate validator exceptions.
+    */
 }
