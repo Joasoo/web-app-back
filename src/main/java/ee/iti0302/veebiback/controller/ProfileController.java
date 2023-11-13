@@ -6,7 +6,7 @@ import ee.iti0302.veebiback.dto.StatusCodeDto;
 import ee.iti0302.veebiback.dto.ViewProfileDataDto;
 import ee.iti0302.veebiback.service.ProfileService;
 import ee.iti0302.veebiback.service.StatusCodeService;
-import ee.iti0302.veebiback.util.StatusCodeClass;
+import ee.iti0302.veebiback.util.enums.StatusCodeClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

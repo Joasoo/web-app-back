@@ -2,16 +2,23 @@ package ee.iti0302.veebiback.service;
 
 import ee.iti0302.veebiback.domain.Friendship;
 import ee.iti0302.veebiback.domain.Person;
-import ee.iti0302.veebiback.dto.BaseDto;
-import ee.iti0302.veebiback.dto.FriendRequestDto;
-import ee.iti0302.veebiback.dto.FriendshipDto;
+import ee.iti0302.veebiback.domain.StatusCode;
+import ee.iti0302.veebiback.dto.*;
 import ee.iti0302.veebiback.repository.FriendshipRepository;
 import ee.iti0302.veebiback.repository.PersonRepository;
+import ee.iti0302.veebiback.repository.StatusCodeRepository;
 import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
+import ee.iti0302.veebiback.service.mapper.StatusCodeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_A;
+import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_S;
+import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_R;
 
 @Service
 @RequiredArgsConstructor
@@ -19,26 +26,18 @@ public class FriendshipService {
     private final PersonRepository personRepository;
     private final FriendshipRepository friendshipRepository;
     private final FriendshipMapper friendshipMapper;
+    private final StatusCodeRepository statusCodeRepository;
+    private final StatusCodeMapper statusCodeMapper;
 
-    public FriendshipDto getFriendshipStatus(Long personId, Long friendId) {
-        Optional<Friendship> personToFriendRequest =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
-        Optional<Friendship> friendToPersonRequest =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
-        // They are already friends
-        if (personToFriendRequest.isPresent() && friendToPersonRequest.isPresent()) {
-            return friendshipMapper.toDto(personToFriendRequest.get());
+    public FriendListDto getFriendshipStatus(Long personId, Long friendId) {
+        Optional<Friendship> optionalFriendship =
+                friendshipRepository.findFriendshipByPersonIdAndFriendId(personId, friendId);
+        if (optionalFriendship.isPresent()) {
+           Friendship friendship = optionalFriendship.get();
+           return friendshipMapper.toFriendListDto(friendship);
         }
-        // The person requesting this status has a pending friend request to the other person.
-        else if (personToFriendRequest.isPresent()) {
-            return friendshipMapper.toDto(personToFriendRequest.get());
-        }
-        // The other person has a pending friend request to the person requesting this status.
-        else if (friendToPersonRequest.isPresent()) {
-            return friendshipMapper.toDto(friendToPersonRequest.get());
-        }
-        // They are not friends and don't have any pending requests.
-        return new FriendshipDto();
+        // They are not friends and there aren't any pending requests
+        return new FriendListDto();
     }
 
     public BaseDto addFriend(FriendRequestDto request) {
@@ -47,87 +46,100 @@ public class FriendshipService {
 
 
         if (optionalPerson.isPresent() && optionalFriend.isPresent()) {
-            // Make a new friendship
-            Friendship friendship = new Friendship();
-            friendship.setPerson(optionalPerson.get());
-            friendship.setFriend(optionalFriend.get());
-
             Long personId = optionalPerson.get().getId();
             Long friendId = optionalFriend.get().getId();
 
-            Optional<Friendship> optionalExistingRequest =
-                    friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
+            // Try to find an existing relation between the two people
+            Optional<Friendship> optionalRequestPerson =
+                    friendshipRepository.findFriendshipByPersonIdAndFriendId(personId, friendId);
+            Optional<Friendship> optionalRequestFriend =
+                    friendshipRepository.findFriendshipByPersonIdAndFriendId(friendId, personId);
 
-            // Check if friend has also made a request to you => Make them friends
-            if (optionalExistingRequest.isPresent()) {
-                Friendship existingRequest = optionalExistingRequest.get();
-                existingRequest.setConfirmed(true);
-                friendshipRepository.save(existingRequest);
-                friendship.setConfirmed(true);
-            } else {
-                // Leave it as a request
-                friendship.setConfirmed(false);
+            // If there is an existing relation, accept the friend request
+            if (optionalRequestPerson.isPresent() && optionalRequestFriend.isPresent()) {
+                Friendship requestPerson = optionalRequestPerson.get();
+                Friendship requestFriend = optionalRequestFriend.get();
+                acceptRequest(requestPerson, requestFriend);
             }
 
-            friendshipRepository.save(friendship);
+            // There is no previous relation, make a new friend relation as a request
+            else {
+                makeRequest(optionalPerson.get(), optionalFriend.get());
+            }
         }
         return new BaseDto();
     }
 
-    public BaseDto acceptFriendRequest(FriendRequestDto request) {
-        Long personId = request.getPersonId();
-        Long friendId = request.getFriendId();
-        Optional<Friendship> requestFromPerson =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
-        Optional<Friendship> requestFromFriend =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
-
-        // Check it both ways, so it doesn't matter which way person and friend are sent in DTO.
-        if (requestFromPerson.isPresent()) {
-            // Confirm the initial request
-            Friendship friendship = requestFromPerson.get();
-            friendship.setConfirmed(true);
-
-            // Create a new friendship for the other person (who accepted the request)
-            Friendship newFriendship = createFriendship(friendship.getFriend(), friendship.getPerson());
-
-            friendshipRepository.save(friendship);
-            friendshipRepository.save(newFriendship);
-
-        } else if (requestFromFriend.isPresent()) {
-            // Confirm the initial request
-            Friendship friendship = requestFromFriend.get();
-            friendship.setConfirmed(true);
-
-            // Create a new friendship for the other person (who accepted the request)
-            Friendship newFriendship = createFriendship(friendship.getPerson(), friendship.getFriend());
-
-            friendshipRepository.save(friendship);
-            friendshipRepository.save(newFriendship);
-        }
-
-        return new BaseDto();
-    }
-
-    public BaseDto removeFriendship(Long personId, Long friendId) {
-        // Check it both ways (cancel own request or decline other request)
+    public BaseDto removeFriend(Long personId, Long friendId) {
+        // Delete the (sent) and (received) requests for person and friend
         Optional<Friendship> personRequest =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(personId, friendId);
+                friendshipRepository.findFriendshipByPersonIdAndFriendId(personId, friendId);
         Optional<Friendship> friendRequest =
-                friendshipRepository.findFriendshipByPerson_IdAndFriend_Id(friendId, personId);
+                friendshipRepository.findFriendshipByPersonIdAndFriendId(friendId, personId);
 
-        // Delete the request
         personRequest.ifPresent(friendshipRepository::delete);
         friendRequest.ifPresent(friendshipRepository::delete);
 
         return new BaseDto();
     }
 
+    public List<FriendListDto> getFriendsList(Long personId) {
+        var friendshipRelations = friendshipRepository.findFriendshipsByPersonId(personId);
+        /*
+        Valid relations (shown on the front-end) are the ones with FR_STATUS_A or FR_STATUS_S
+        since we don't show blocked people in friend's list.
+        */
+        var validRelations = new ArrayList<FriendListDto>();
+        if (friendshipRelations.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        for (var relation : friendshipRelations) {
+            var status = statusCodeMapper.toDto(relation.getStatus());
+            if (List.of(FR_STATUS_A.name(), FR_STATUS_S.name())
+                    .contains(status.getCode())) {
+                var friend = relation.getFriend();
+                var fullName = new FullNameDto(friend.getFirstName(), friend.getLastName());
+
+                var friendListDto = new FriendListDto();
+                friendListDto.setId(friend.getId());
+                friendListDto.setName(fullName);
+                friendListDto.setStatus(status);
+                validRelations.add(friendListDto);
+            }
+        }
+        return validRelations;
+    }
+
+    // --------------------------------------------- Private methods ---------------------------------------------
 
     private Friendship createFriendship(Person person, Person friend) {
         Friendship friendship = new Friendship();
         friendship.setPerson(person);
         friendship.setFriend(friend);
         return friendship;
+    }
+
+    private void acceptRequest(Friendship requestPerson, Friendship requestFriend) {
+        Optional<StatusCode> optionalAccepted = statusCodeRepository.findByCode(FR_STATUS_A.name());
+        requestPerson.setStatus(optionalAccepted.orElseThrow());
+        requestFriend.setStatus(optionalAccepted.orElseThrow());
+
+        friendshipRepository.save(requestPerson);
+        friendshipRepository.save(requestFriend);
+    }
+
+    private void makeRequest(Person person, Person friend) {
+        Optional<StatusCode> optionalSent = statusCodeRepository.findByCode(FR_STATUS_S.name());
+        Optional<StatusCode> optionalReceived = statusCodeRepository.findByCode(FR_STATUS_R.name());
+
+        Friendship newRequestPerson = createFriendship(person, friend);
+        Friendship newRequestFriend = createFriendship(friend, person);
+
+        newRequestPerson.setStatus(optionalSent.orElseThrow());
+        newRequestFriend.setStatus(optionalReceived.orElseThrow());
+
+        friendshipRepository.save(newRequestPerson);
+        friendshipRepository.save(newRequestFriend);
     }
 }

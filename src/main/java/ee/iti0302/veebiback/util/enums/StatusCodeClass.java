@@ -1,4 +1,4 @@
-package ee.iti0302.veebiback.util;
+package ee.iti0302.veebiback.util.enums;
 
 public enum StatusCodeClass {
     /**
@@ -8,5 +8,7 @@ public enum StatusCodeClass {
     /**
      * (account) Visibility status
      */
-    VIS_STATUS
+    VIS_STATUS,
+
+    FR_STATUS
 }
