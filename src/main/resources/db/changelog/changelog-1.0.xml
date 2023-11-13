@@ -113,12 +113,62 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="19.10.2023 Add confirmed column to person_friend table for friend requests" author="Markus Joasoo">
-        <addColumn tableName="person_friend">
-            <column type="boolean" name="confirmed" remarks="Friend request confirmation">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
+    <changeSet id="09-11-2023 Insert status codes" author="Markus Joasoo">
+        <insert tableName="status_code">
+            <column name="code" value="REL_STATUS_M"/>
+            <column name="code_class" value="REL_STATUS"/>
+            <column name="value" value="Married"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="REL_STATUS_R"/>
+            <column name="code_class" value="REL_STATUS"/>
+            <column name="value" value="In a relationship"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="REL_STATUS_S"/>
+            <column name="code_class" value="REL_STATUS"/>
+            <column name="value" value="Single"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="REL_STATUS_C"/>
+            <column name="code_class" value="REL_STATUS"/>
+            <column name="value" value="Complicated"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="VIS_STATUS_PR"/>
+            <column name="code_class" value="VIS_STATUS"/>
+            <column name="value" value="Private"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="VIS_STATUS_PU"/>
+            <column name="code_class" value="VIS_STATUS"/>
+            <column name="value" value="Public"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="VIS_STATUS_FO"/>
+            <column name="code_class" value="VIS_STATUS"/>
+            <column name="value" value="Friends-Only"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="FR_STATUS_S"/>
+            <column name="code_class" value="FR_STATUS"/>
+            <column name="value" value="Sent"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="FR_STATUS_R"/>
+            <column name="code_class" value="FR_STATUS"/>
+            <column name="value" value="Received"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="FR_STATUS_A"/>
+            <column name="code_class" value="FR_STATUS"/>
+            <column name="value" value="Accepted"/>
+        </insert>
+        <insert tableName="status_code">
+            <column name="code" value="FR_STATUS_B"/>
+            <column name="code_class" value="FR_STATUS"/>
+            <column name="value" value="Blocked"/>
+        </insert>
     </changeSet>
 
     <changeSet id="06-11-2023 Add status codes for friend requests" author="Allan Lip">
