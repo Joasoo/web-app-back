@@ -10,11 +10,13 @@ import org.springframework.web.context.request.ServletWebRequest;
 @ControllerAdvice
 public final class GlobalExceptionHandler {
 
+    private static final String GENERIC_RESPONSE = "An error has occurred. Please try again later.";
+
     @ExceptionHandler({RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody ExceptionResponse handleRuntimeException(ServletWebRequest req, RuntimeException ex) {
         ex.printStackTrace();
-        return new ExceptionResponse(req.getRequest().getRequestURI(), ex.getMessage());
+        return new ExceptionResponse(req.getRequest().getRequestURI(), GENERIC_RESPONSE);
     }
 
     @ExceptionHandler({EmailInUseException.class, IncorrectCredentialsException.class})
