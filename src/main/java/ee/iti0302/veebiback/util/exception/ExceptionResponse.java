@@ -13,9 +13,15 @@ public class ExceptionResponse {
     private String cause;
     private Long statusCode;
 
+    public static final String GENERIC_RESPONSE = "An error has occurred. Please try again later.";
+
+    public ExceptionResponse(String path) {
+        this(path, null);
+    }
+
     public ExceptionResponse(String path, String cause) {
         this.path = path;
         this.timestamp = LocalDateTime.now();
-        this.cause = cause;
+        this.cause = cause != null ? cause : GENERIC_RESPONSE;
     }
 }

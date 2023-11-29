@@ -6,8 +6,8 @@ import ee.iti0302.veebiback.dto.RegisterDto;
 import ee.iti0302.veebiback.dto.TokenDto;
 import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.security.jwt.OAuthJWTManager;
-import ee.iti0302.veebiback.util.exception.EmailInUseException;
-import ee.iti0302.veebiback.util.exception.IncorrectCredentialsException;
+import ee.iti0302.veebiback.util.exception.ApplicationException;
+import ee.iti0302.veebiback.util.exception.AuthenticationException;
 import ee.iti0302.veebiback.service.mapper.PersonMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +23,7 @@ public class AuthenticationService {
 
     public BaseDto registerUser(RegisterDto dto) {
         if (accountWithEmailExists(dto.getEmail())) {
-            throw new EmailInUseException("This e-mail is already in use.");
+            throw new ApplicationException("This e-mail is already in use.");
         }
         var passwordHash = encoder.encode(dto.getPassword());
         var entity = personMapper.registerDtoToEntity(dto);
@@ -37,7 +37,7 @@ public class AuthenticationService {
         var person = personRepository.findByEmail(dto.getEmail());
         if (person.isEmpty()
                 || !encoder.matches(dto.getPassword(), person.get().getPassword())) {
-            throw new IncorrectCredentialsException("Incorrect e-mail or password.");
+            throw new AuthenticationException("Incorrect e-mail or password.");
         }
         return new TokenDto(person.get().getId(), jwtManager.generate(person.get().getId()));
     }

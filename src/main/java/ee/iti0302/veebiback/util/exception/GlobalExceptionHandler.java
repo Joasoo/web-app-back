@@ -12,25 +12,22 @@ import org.springframework.web.context.request.ServletWebRequest;
 @ControllerAdvice
 public final class GlobalExceptionHandler {
 
-    private static final String GENERIC_RESPONSE = "An error has occurred. Please try again later.";
-
     @ExceptionHandler({RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody ExceptionResponse handleRuntimeException(ServletWebRequest req, RuntimeException ex) {
         log.error(ex.getMessage());
-        return new ExceptionResponse(req.getRequest().getRequestURI(), GENERIC_RESPONSE);
+        return new ExceptionResponse(req.getRequest().getRequestURI());
     }
 
-    @ExceptionHandler({EmailInUseException.class, IncorrectCredentialsException.class})
+    @ExceptionHandler({AuthenticationException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public @ResponseBody ExceptionResponse handleAuthException(ServletWebRequest req, RuntimeException ex) {
         return new ExceptionResponse(req.getRequest().getRequestURI(), ex.getMessage());
     }
 
-
-
-    /* todo:
-    *   - For client caused exceptions: HttpStatus.BAD_REQUEST
-    *   - Need to catch Hibernate validator exceptions.
-    */
+    @ExceptionHandler({ApplicationException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody ExceptionResponse handleApplicationException(ServletWebRequest req, RuntimeException ex) {
+        return new ExceptionResponse(req.getRequest().getRequestURI(), ex.getMessage());
+    }
 }
