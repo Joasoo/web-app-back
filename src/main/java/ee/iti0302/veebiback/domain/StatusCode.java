@@ -15,14 +15,14 @@ import lombok.Setter;
 public class StatusCode {
     @Id
     @NotNull
-    @Column(name = "code", insertable = false, updatable = false)
+    @Column(name = "code")
     private String code;
 
     @NotNull
-    @Column(name = "code_class", insertable = false, updatable = false)
+    @Column(name = "code_class")
     private String codeClass;
 
     @NotNull
-    @Column(name = "value", insertable = false, updatable = false)
+    @Column(name = "value")
     private String value;
 }
