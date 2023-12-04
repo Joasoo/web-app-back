@@ -1,9 +1,6 @@
 package ee.iti0302.veebiback.controller;
 
-import ee.iti0302.veebiback.dto.BaseDto;
-import ee.iti0302.veebiback.dto.EditProfileDataDto;
-import ee.iti0302.veebiback.dto.StatusCodeDto;
-import ee.iti0302.veebiback.dto.ViewProfileDataDto;
+import ee.iti0302.veebiback.dto.*;
 import ee.iti0302.veebiback.service.ProfileService;
 import ee.iti0302.veebiback.service.StatusCodeService;
 import ee.iti0302.veebiback.util.enums.StatusCodeClass;
@@ -38,5 +35,10 @@ public class ProfileController {
     @GetMapping("/relationship-status")
     public List<StatusCodeDto> getAllRelationshipStatuses() {
         return statusCodeService.getStatusCodesByClass(StatusCodeClass.REL_STATUS);
+    }
+
+    @GetMapping("/name/{id}")
+    public FullNameDto getPersonName(@PathVariable Long id) {
+        return profileService.getPersonName(id);
     }
 }

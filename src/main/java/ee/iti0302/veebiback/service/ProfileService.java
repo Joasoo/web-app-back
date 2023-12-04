@@ -4,9 +4,11 @@ import ee.iti0302.veebiback.domain.Person;
 import ee.iti0302.veebiback.domain.StatusCode;
 import ee.iti0302.veebiback.dto.BaseDto;
 import ee.iti0302.veebiback.dto.EditProfileDataDto;
+import ee.iti0302.veebiback.dto.FullNameDto;
 import ee.iti0302.veebiback.dto.ViewProfileDataDto;
 import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.StatusCodeRepository;
+import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
 import ee.iti0302.veebiback.service.mapper.PersonMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class ProfileService {
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
     private final StatusCodeRepository statusCodeRepository;
+    private final FriendshipMapper friendshipMapper;
 
     public ViewProfileDataDto getViewProfileData(Long id) {
         Optional<Person> optionalPerson = personRepository.findById(id);
@@ -56,5 +59,12 @@ public class ProfileService {
             personRepository.save(person);
         }
         return new BaseDto();
+    }
+
+    public FullNameDto getPersonName(Long id) {
+        var person = personRepository.findById(id);
+        return person
+                .map(value -> new FullNameDto(value.getFirstName(), value.getLastName()))
+                .orElseGet(FullNameDto::new);
     }
 }
