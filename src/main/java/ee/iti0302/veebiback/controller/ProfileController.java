@@ -30,7 +30,7 @@ public class ProfileController {
         return profileService.getEditProfileData(id);
     }
 
-    @PostMapping("/edit/save")
+    @PostMapping("/edit")
     public BaseDto saveProfileData(@RequestBody EditProfileDataDto dto) {
         return profileService.updateProfileData(dto);
     }

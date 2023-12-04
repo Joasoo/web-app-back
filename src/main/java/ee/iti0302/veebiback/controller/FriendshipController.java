@@ -17,17 +17,17 @@ import java.util.List;
 public class FriendshipController {
     private final FriendshipService friendshipService;
 
-    @GetMapping("/status")
+    @GetMapping()
     public FriendListDto getFriendshipStatus(@RequestParam Long personId, @RequestParam Long friendId) {
         return friendshipService.getFriendshipStatus(personId, friendId);
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public BaseDto addFriend(@RequestBody FriendRequestDto request) {
         return friendshipService.addFriend(request);
     }
 
-    @DeleteMapping("/remove")
+    @DeleteMapping()
     public BaseDto removeFriend(@RequestParam Long personId, @RequestParam Long friendId) {
         return friendshipService.removeFriend(personId, friendId);
     }
