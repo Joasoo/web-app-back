@@ -96,7 +96,7 @@
     <changeSet id="10-10-2023 Add status_code table" author="Allan Lip">
         <createTable tableName="status_code">
             <column name="code" type="text">
-                <constraints primaryKey="true" unique="true" nullable="false" />
+                <constraints primaryKey="true" unique="true" nullable="false"/>
             </column>
             <column name="code_class" type="text">
                 <constraints nullable="false"/>
@@ -174,7 +174,7 @@
     <changeSet id="06-11-2023 Add status codes for friend requests" author="Allan Lip">
         <addColumn tableName="person_friend">
             <column type="text" name="fk_friend_status" remarks="Status of the friendship relation">
-                <constraints  nullable="false" foreignKeyName="fk_friend_status" references="status_code(code)"/>
+                <constraints nullable="false" foreignKeyName="fk_friend_status" references="status_code(code)"/>
             </column>
         </addColumn>
     </changeSet>
@@ -237,4 +237,17 @@
         </insert>
     </changeSet>
 
+    <changeSet id="04-12-2023 Add table for inspirational quotes" author="Markus Joasoo">
+        <createTable tableName="quote">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="quote" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
