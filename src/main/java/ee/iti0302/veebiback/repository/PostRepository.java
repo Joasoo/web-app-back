@@ -11,7 +11,5 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByPersonIdOrderByCreatedAtDesc(Long personId);
-
     List<Post> findAllByPersonIdIn(List<Long> people, Pageable pageable);
-
 }

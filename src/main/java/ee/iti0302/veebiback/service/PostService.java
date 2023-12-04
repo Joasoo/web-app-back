@@ -68,5 +68,4 @@ public class PostService {
                 .map(fs -> fs.getFriend().getId())
                 .toList();
     }
-
 }
