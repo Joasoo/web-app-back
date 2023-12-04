@@ -9,6 +9,8 @@ import ee.iti0302.veebiback.service.mapper.PostMapper;
 import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.PostRepository;
 import ee.iti0302.veebiback.service.mapper.StatusCodeMapper;
+import ee.iti0302.veebiback.util.enums.FriendshipStatus;
+import ee.iti0302.veebiback.util.enums.StatusCodeClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -62,8 +64,8 @@ public class PostService {
 
 
     private List<Long> getFriendIds(Long personId) {
-        String temp = "Accepted";
-        List<Friendship> friends = friendshipRepository.findFriendshipsByPersonIdAndStatusValue(personId, temp);
+        String status = FriendshipStatus.FR_STATUS_A.name();
+        List<Friendship> friends = friendshipRepository.findFriendshipsByPersonIdAndStatusCode(personId, status);
         return friends.stream()
                 .map(fs -> fs.getFriend().getId())
                 .toList();
