@@ -15,6 +15,16 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
 
+    @PostMapping()
+    public BaseDto addPost(@RequestBody AddPostDto postDto) {
+        return postService.addPost(postDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public BaseDto deletePost(@PathVariable Long id) {
+        return postService.deletePost(id);
+    }
+
     @GetMapping("/person/{id}")
     public List<PostDto> getPostList(@PathVariable Long id) {
         return postService.getPostList(id);
@@ -23,15 +33,5 @@ public class PostController {
     @GetMapping("/feed/{id}")
     public List<PostDto> getFeed(@PathVariable Long id, @RequestParam Integer pageNumber, @RequestParam Integer limit) {
         return postService.getFeed(id, pageNumber, limit);
-    }
-
-    @PostMapping("/add")
-    public BaseDto addPost(@RequestBody AddPostDto postDto) {
-        return postService.addPost(postDto);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public BaseDto deletePost(@PathVariable Long id) {
-        return postService.deletePost(id);
     }
 }
