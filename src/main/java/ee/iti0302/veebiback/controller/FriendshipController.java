@@ -36,5 +36,4 @@ public class FriendshipController {
     public List<FriendListDto> getFriendsList(@PathVariable Long id) {
         return friendshipService.getFriendsList(id);
     }
-
 }

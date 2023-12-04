@@ -39,6 +39,4 @@ public class ProfileController {
     public List<StatusCodeDto> getAllRelationshipStatuses() {
         return statusCodeService.getStatusCodesByClass(StatusCodeClass.REL_STATUS);
     }
-
-
 }
