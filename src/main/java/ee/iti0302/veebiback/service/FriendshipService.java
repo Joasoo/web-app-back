@@ -9,6 +9,8 @@ import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.StatusCodeRepository;
 import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
 import ee.iti0302.veebiback.service.mapper.StatusCodeMapper;
+import ee.iti0302.veebiback.util.enums.FriendshipStatus;
+import ee.iti0302.veebiback.util.enums.StatusCodeClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -109,6 +111,13 @@ public class FriendshipService {
             }
         }
         return validRelations;
+    }
+
+    public List<FriendListDto> getReceivedRequests(Long personId) {
+        var receivedStatus = FR_STATUS_R.name();
+        return friendshipMapper.toFriendListDtos(
+                friendshipRepository.findFriendshipsByPersonIdAndStatusCode(personId, receivedStatus)
+        );
     }
 
     // --------------------------------------------- Private methods ---------------------------------------------

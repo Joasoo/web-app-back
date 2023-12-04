@@ -36,4 +36,10 @@ public class FriendshipController {
     public List<FriendListDto> getFriendsList(@PathVariable Long id) {
         return friendshipService.getFriendsList(id);
     }
+
+    @GetMapping("/requests/received/{id}")
+    public List<FriendListDto> getReceivedRequests(@PathVariable Long id) {
+        return friendshipService.getReceivedRequests(id);
+    }
+
 }
