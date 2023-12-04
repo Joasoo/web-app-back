@@ -15,12 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_A;
-import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_S;
 
 @Service
 @RequiredArgsConstructor

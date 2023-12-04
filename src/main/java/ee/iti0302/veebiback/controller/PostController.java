@@ -21,8 +21,8 @@ public class PostController {
     }
 
     @GetMapping("/feed/{id}")
-    public List<PostDto> getFeed(@PathVariable Long id, @RequestParam Integer page, @RequestParam Integer limit) {
-        return postService.getFeed(id, page, limit);
+    public List<PostDto> getFeed(@PathVariable Long id, @RequestParam Integer pageNumber, @RequestParam Integer limit) {
+        return postService.getFeed(id, pageNumber, limit);
     }
 
     @PostMapping("/add")
