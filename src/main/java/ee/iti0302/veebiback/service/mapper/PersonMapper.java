@@ -2,12 +2,15 @@ package ee.iti0302.veebiback.service.mapper;
 
 import ee.iti0302.veebiback.domain.Person;
 import ee.iti0302.veebiback.dto.EditProfileDataDto;
+import ee.iti0302.veebiback.dto.PersonFullNameDto;
 import ee.iti0302.veebiback.dto.ViewProfileDataDto;
 import ee.iti0302.veebiback.dto.RegisterDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {StatusCodeMapper.class})
 public interface PersonMapper {
@@ -21,4 +24,6 @@ public interface PersonMapper {
     void updateProfileDataFromDto(EditProfileDataDto dto, @MappingTarget Person entity);
     Person fromEditDtoToPerson(EditProfileDataDto dto);
     ViewProfileDataDto entityToProfileDataDto(Person entity);
+    PersonFullNameDto entityToPersonFullNameDto(Person entity);
+    List<PersonFullNameDto> entitiesToPersonFullNameDtos(List<Person> entities);
 }
