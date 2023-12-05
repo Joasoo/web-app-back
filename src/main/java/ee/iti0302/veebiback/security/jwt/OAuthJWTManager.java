@@ -34,7 +34,6 @@ public class OAuthJWTManager {
         return jwtBuilder
                 .withClaim("personId", personId)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 3_600_000L))
                 .withJWTId(UUID.randomUUID().toString())
                 .sign(algorithm);
     }
