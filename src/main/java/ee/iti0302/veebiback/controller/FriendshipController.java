@@ -4,6 +4,7 @@ import ee.iti0302.veebiback.dto.BaseDto;
 import ee.iti0302.veebiback.dto.FriendListDto;
 import ee.iti0302.veebiback.dto.FriendRequestDto;
 import ee.iti0302.veebiback.service.FriendshipService;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
