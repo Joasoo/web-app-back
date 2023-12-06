@@ -45,7 +45,9 @@ public class ProfileService {
         Optional<Person> optionalPerson = personRepository.findById(dto.getId());
         if (optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
+            System.out.println("Dto bio: " + dto.getBio());
             personMapper.updateProfileDataFromDto(dto, person);
+            System.out.println("Person bio: " + person.getBio());
             /* StatusCode instance needs to be set manually, since mapping to
              *  the already 'attached' StatusCode instance using update will result in an exception. */
             if (dto.getRelationshipStatus() == null) {

@@ -250,4 +250,10 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="06-12-2023 Add profile bio to person table" author="Markus Joasoo">
+        <addColumn tableName="person">
+            <column name="bio" type="text" remarks="Profile bio"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
