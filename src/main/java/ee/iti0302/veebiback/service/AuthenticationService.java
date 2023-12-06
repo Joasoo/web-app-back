@@ -34,7 +34,7 @@ public class AuthenticationService {
     }
 
     public TokenDto loginUser(LoginDto dto) {
-        var person = personRepository.findByEmail(dto.getEmail());
+        var person = personRepository.findByEmailIgnoreCase(dto.getEmail());
         if (person.isEmpty()
                 || !encoder.matches(dto.getPassword(), person.get().getPassword())) {
             throw new AuthenticationException("Incorrect e-mail or password.");

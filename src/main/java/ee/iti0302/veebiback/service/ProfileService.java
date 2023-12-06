@@ -48,8 +48,9 @@ public class ProfileService {
 
     public BaseDto updateProfileData(EditProfileDataDto dto) {
         Optional<Person> optionalPerson = personRepository.findById(dto.getId());
+        Optional<Person> sameEmail = personRepository.findByEmailIgnoreCaseAndIdIsNot(dto.getEmail(), dto.getId());
         validator.validateWithThrow(dto);
-        if (personRepository.existsByEmailIgnoreCase(dto.getEmail())) {
+        if (sameEmail.isPresent()) {
             throw new ApplicationException("Account with this e-mail already exists.");
         }
 
