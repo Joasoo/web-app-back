@@ -10,6 +10,10 @@ import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.StatusCodeRepository;
 import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
 import ee.iti0302.veebiback.service.mapper.PersonMapper;
+import ee.iti0302.veebiback.util.exception.ApplicationException;
+import ee.iti0302.veebiback.util.validation.CustomValidator;
+import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,7 @@ public class ProfileService {
     private final PersonMapper personMapper;
     private final StatusCodeRepository statusCodeRepository;
     private final FriendshipMapper friendshipMapper;
+    private final CustomValidator validator;
 
     public ViewProfileDataDto getViewProfileData(Long id) {
         Optional<Person> optionalPerson = personRepository.findById(id);
@@ -43,6 +48,12 @@ public class ProfileService {
 
     public BaseDto updateProfileData(EditProfileDataDto dto) {
         Optional<Person> optionalPerson = personRepository.findById(dto.getId());
+        Optional<Person> sameEmail = personRepository.findByEmailIgnoreCaseAndIdIsNot(dto.getEmail(), dto.getId());
+        validator.validateWithThrow(dto);
+        if (sameEmail.isPresent()) {
+            throw new ApplicationException("Account with this e-mail already exists.");
+        }
+
         if (optionalPerson.isPresent()) {
             Person person = optionalPerson.get();
             System.out.println("Dto bio: " + dto.getBio());

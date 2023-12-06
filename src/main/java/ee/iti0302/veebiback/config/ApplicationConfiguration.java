@@ -2,8 +2,11 @@ package ee.iti0302.veebiback.config;
 
 import com.auth0.jwt.algorithms.Algorithm;
 import ee.iti0302.veebiback.security.jwt.OAuthJWTManager;
+import ee.iti0302.veebiback.util.validation.CustomValidator;
+import ee.iti0302.veebiback.util.validation.CustomValidatorImpl;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import org.hibernate.validator.HibernateValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,12 +27,12 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public Validator getValidator() {
-        return Validation
-                .byDefaultProvider()
+    public CustomValidator getValidator() {
+        return new CustomValidatorImpl(Validation
+                .byProvider(HibernateValidator.class)
                 .configure()
                 .buildValidatorFactory()
-                .getValidator();
+                .getValidator());
     }
 
     @Bean
