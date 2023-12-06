@@ -48,6 +48,9 @@ public class Person {
     @Column(name = "hometown")
     private String hometown;
 
+    @Column(name = "bio")
+    private String bio;
+
     @ManyToOne
     @JoinColumn(name = "fk_code_rel_status")
     private StatusCode relationshipStatus;
