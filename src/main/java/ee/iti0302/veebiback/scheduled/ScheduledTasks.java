@@ -5,15 +5,16 @@ import ee.iti0302.veebiback.dto.QuoteDto;
 import ee.iti0302.veebiback.repository.QuoteRepository;
 import ee.iti0302.veebiback.service.mapper.QuoteMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ScheduledTasks {
     private final RestTemplate template;
     private final QuoteRepository repository;
@@ -27,6 +28,8 @@ public class ScheduledTasks {
             List<Quote> fresh = mapper.toEntityList(response);
             repository.saveAll(fresh);
             repository.deleteAllInBatch(previous);
+        } else {
+            log.info("[ScheduledTasks] Couldn't fetch quotes from API");
         }
     }
 }
