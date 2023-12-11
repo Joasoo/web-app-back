@@ -8,16 +8,15 @@ import ee.iti0302.veebiback.dto.FullNameDto;
 import ee.iti0302.veebiback.dto.ViewProfileDataDto;
 import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.StatusCodeRepository;
-import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
 import ee.iti0302.veebiback.service.mapper.PersonMapper;
 import ee.iti0302.veebiback.util.exception.ApplicationException;
 import ee.iti0302.veebiback.util.validation.CustomValidator;
-import jakarta.validation.Valid;
-import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static ee.iti0302.veebiback.util.constant.ExceptionMessageConstant.EMAIL_IN_USE;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,6 @@ public class ProfileService {
     private final PersonRepository personRepository;
     private final PersonMapper personMapper;
     private final StatusCodeRepository statusCodeRepository;
-    private final FriendshipMapper friendshipMapper;
     private final CustomValidator validator;
 
     public ViewProfileDataDto getViewProfileData(Long id) {
@@ -51,7 +49,7 @@ public class ProfileService {
         Optional<Person> sameEmail = personRepository.findByEmailIgnoreCaseAndIdIsNot(dto.getEmail(), dto.getId());
         validator.validateWithThrow(dto);
         if (sameEmail.isPresent()) {
-            throw new ApplicationException("Account with this e-mail already exists.");
+            throw new ApplicationException(EMAIL_IN_USE);
         }
 
         if (optionalPerson.isPresent()) {
