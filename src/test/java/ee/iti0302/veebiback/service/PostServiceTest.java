@@ -94,7 +94,16 @@ class PostServiceTest {
 
     @Test
     void getFeed_NoFriends_EmptyList() {
+        int page = 0;
+        int limit = 5;
+        Pageable query = PageRequest.of(page, limit, Sort.by("createdAt").descending());
+        given(friendshipRepository.findFriendshipsByPersonIdAndStatusCode(person1.getId(), accepted.getCode()))
+                .willReturn(List.of());
+        given(postRepository.findAllByPersonIdIn(List.of(), query)).willReturn(List.of());
 
+        List<PostDto> result = service.getFeed(person1.getId(), page, limit);
+
+        assertEquals(List.of(), result);
     }
 
     @Test
