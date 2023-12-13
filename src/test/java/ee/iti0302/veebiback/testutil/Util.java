@@ -12,6 +12,8 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -181,5 +183,28 @@ public class Util {
                 .limit(length)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+    }
+
+    @Builder
+    public static class StatusCodeMock {
+        private String code;
+        private String codeClass;
+        private String value;
+
+        public StatusCodeDto asDto() {
+            return StatusCodeDto.builder()
+                    .code(code)
+                    .codeClass(codeClass)
+                    .value(value)
+                    .build();
+        }
+
+        public StatusCode asEntity() {
+            return StatusCode.builder()
+                    .code(code)
+                    .codeClass(codeClass)
+                    .value(value)
+                    .build();
+        }
     }
 }

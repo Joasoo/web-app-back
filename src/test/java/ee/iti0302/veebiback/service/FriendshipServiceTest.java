@@ -204,6 +204,7 @@ class FriendshipServiceTest {
 
     @Test
     void addFriend() {
+
     }
 
     @Test

@@ -9,6 +9,8 @@ public enum StatusCodeClass {
      * (account) Visibility status
      */
     VIS_STATUS,
-
+    /**
+     * Friendship status
+     * */
     FR_STATUS
 }

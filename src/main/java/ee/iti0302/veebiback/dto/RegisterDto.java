@@ -3,9 +3,7 @@ package ee.iti0302.veebiback.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -15,6 +13,9 @@ import static ee.iti0302.veebiback.util.constant.ExceptionMessageConstant.*;
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterDto {
     @NotEmpty(message = FIRST_NAME_NOT_EMPTY)
     private String firstName;
