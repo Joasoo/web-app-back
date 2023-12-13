@@ -1,10 +1,15 @@
 package ee.iti0302.veebiback.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
+@NoArgsConstructor
 public class PersonFullNameDto extends FullNameDto {
     private Long id; // Person's ID
+
+    public PersonFullNameDto(String firstName, String lastName, Long id) {
+        super(firstName, lastName);
+        this.id = id;
+    }
 }

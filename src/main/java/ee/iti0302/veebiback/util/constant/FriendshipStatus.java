@@ -1,4 +1,4 @@
-package ee.iti0302.veebiback.util.enums;
+package ee.iti0302.veebiback.util.constant;
 
 public enum FriendshipStatus {
     /**

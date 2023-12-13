@@ -4,15 +4,14 @@ import ee.iti0302.veebiback.domain.Friendship;
 import ee.iti0302.veebiback.domain.Person;
 import ee.iti0302.veebiback.domain.StatusCode;
 import ee.iti0302.veebiback.dto.FriendListDto;
-import ee.iti0302.veebiback.dto.FullNameDto;
-import ee.iti0302.veebiback.dto.StatusCodeDto;
 import ee.iti0302.veebiback.repository.FriendshipRepository;
 import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.StatusCodeRepository;
 import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
+import ee.iti0302.veebiback.service.mapper.FriendshipMapperImpl;
 import ee.iti0302.veebiback.service.mapper.StatusCodeMapper;
-import ee.iti0302.veebiback.util.enums.FriendshipStatus;
-import ee.iti0302.veebiback.util.enums.StatusCodeClass;
+import ee.iti0302.veebiback.service.mapper.StatusCodeMapperImpl;
+import ee.iti0302.veebiback.util.constant.FriendshipStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,9 +36,9 @@ class FriendshipServiceTest {
     @Mock
     private StatusCodeRepository statusCodeRepository;
     @Spy
-    private FriendshipMapper friendshipMapper;
+    private FriendshipMapper friendshipMapper = new FriendshipMapperImpl();
     @Spy
-    private StatusCodeMapper statusCodeMapper;
+    private StatusCodeMapper statusCodeMapper = new StatusCodeMapperImpl();
     @InjectMocks
     private FriendshipService service;
 
@@ -53,22 +52,13 @@ class FriendshipServiceTest {
 
     @BeforeAll
     static void setUp() {
-        person1 = getRandomPerson();
-        person2 = getRandomPerson(person1.getId());
-        person3 = getRandomPerson(List.of(person1.getId(), person2.getId()));
-        person4 = getRandomPerson(List.of(person1.getId(), person2.getId(), person3.getId()));
-        accepted = StatusCode.builder()
-                .value("Accepted")
-                .code(FriendshipStatus.FR_STATUS_A.name())
-                .codeClass(StatusCodeClass.FR_STATUS.name()).build();
-        sent = StatusCode.builder()
-                .value("Sent")
-                .code(FriendshipStatus.FR_STATUS_S.name())
-                .codeClass(StatusCodeClass.FR_STATUS.name()).build();
-        received = StatusCode.builder()
-                .value("Received")
-                .code(FriendshipStatus.FR_STATUS_R.name())
-                .codeClass(StatusCodeClass.FR_STATUS.name()).build();
+        person1 = getMockPerson();
+        person2 = getMockPerson(person1.getId());
+        person3 = getMockPerson(List.of(person1.getId(), person2.getId()));
+        person4 = getMockPerson(List.of(person1.getId(), person2.getId(), person3.getId()));
+        accepted = getMockStatusCode(FriendshipStatus.FR_STATUS_A).asEntity();
+        sent = getMockStatusCode(FriendshipStatus.FR_STATUS_S).asEntity();
+        received = getMockStatusCode(FriendshipStatus.FR_STATUS_R).asEntity();
     }
 
     @Test
@@ -87,14 +77,10 @@ class FriendshipServiceTest {
     @Test
     void getFriendshipStatus_AlreadyFriends_FilledDtoWithStatusCodeAccepted() {
         Friendship friendship = Friendship.builder().status(accepted).person(person1).friend(person2).id(1L).build();
-        FullNameDto fullNameDto = getFullNameDto(person2);
-        StatusCodeDto statusCodeDto = getStatusCodeDto(accepted);
-        FriendListDto friendListDto = FriendListDto.builder().id(person2.getId()).name(fullNameDto).status(statusCodeDto)
-                .build();
+        FriendListDto friendListDto = getFriendListDto(person2, accepted);
         given(friendshipRepository.findFriendshipByPersonIdAndFriendId(person1.getId(), person2.getId()))
                 .willReturn(Optional.of(friendship));
 
-        verify(friendshipRepository).findFriendshipByPersonIdAndFriendId(person1.getId(), person2.getId());
         FriendListDto result = service.getFriendshipStatus(person1.getId(), person2.getId());
 
         then(friendshipMapper).should().toFriendListDto(friendship);
@@ -105,10 +91,7 @@ class FriendshipServiceTest {
     @Test
     void getFriendshipStatus_SentFriendRequest_FilledDtoWithStatusCodeSent() {
         Friendship friendship = Friendship.builder().status(sent).person(person1).friend(person2).id(2L).build();
-        FullNameDto fullNameDto = getFullNameDto(person2);
-        StatusCodeDto statusCodeDto = getStatusCodeDto(sent);
-        FriendListDto friendListDto = FriendListDto.builder().id(person2.getId()).name(fullNameDto).status(statusCodeDto)
-                .build();
+        FriendListDto friendListDto = getFriendListDto(person2, sent);
         given(friendshipRepository.findFriendshipByPersonIdAndFriendId(person1.getId(), person2.getId()))
                 .willReturn(Optional.of(friendship));
 
@@ -121,11 +104,8 @@ class FriendshipServiceTest {
 
     @Test
     void getFriendshipStatus_ReceivedFriendRequest_FilledDtoWithStatusCodeReceived() {
-        Friendship friendship = Friendship.builder().status(sent).person(person3).friend(person4).id(3L).build();
-        FullNameDto fullNameDto = getFullNameDto(person4);
-        StatusCodeDto statusCodeDto = getStatusCodeDto(received);
-        FriendListDto friendListDto = FriendListDto.builder().id(person4.getId()).name(fullNameDto).status(statusCodeDto)
-                .build();
+        Friendship friendship = Friendship.builder().status(received).person(person3).friend(person4).id(3L).build();
+        FriendListDto friendListDto = getFriendListDto(person4, received);
         given(friendshipRepository.findFriendshipByPersonIdAndFriendId(person3.getId(), person4.getId()))
                 .willReturn(Optional.of(friendship));
 
@@ -136,6 +116,91 @@ class FriendshipServiceTest {
         assertEquals(friendListDto, result);
     }
 
+    @Test
+    void getFriendsList_NoFriends_EmptyList() {
+        given(friendshipRepository.findFriendshipsByPersonId(person1.getId())).willReturn(List.of());
+
+        List<FriendListDto> result = service.getFriendsList(person1.getId());
+
+        then(friendshipRepository).should().findFriendshipsByPersonId(person1.getId());
+        assertEquals(List.of(), result);
+    }
+
+    @Test
+    void getFriendsList_ManyFriends_ListOfFriends() {
+        Friendship friendship1 = Friendship.builder().person(person2).friend(person1).status(accepted).build();
+        Friendship friendship2 = Friendship.builder().person(person2).friend(person3).status(accepted).build();
+        Friendship friendship3 = Friendship.builder().person(person2).friend(person4).status(accepted).build();
+        List<Friendship> queryResult = List.of(friendship1, friendship2, friendship3);
+        given(friendshipRepository.findFriendshipsByPersonId(person2.getId())).willReturn(queryResult);
+
+        List<FriendListDto> result = service.getFriendsList(person2.getId());
+
+        FriendListDto dto1 = getFriendListDto(person1, accepted);
+        FriendListDto dto2 = getFriendListDto(person3, accepted);
+        FriendListDto dto3 = getFriendListDto(person4, accepted);
+        List<FriendListDto> correctResult = List.of(dto1, dto2, dto3);
+        then(statusCodeMapper).should(times(3)).toDto(accepted);
+        assertEquals(correctResult, result);
+    }
+
+    @Test
+    void getFriendsList_FriendsAndSentRequests_ListOfFriendsAndSentRequests() {
+        Friendship friendship1 = Friendship.builder().person(person2).friend(person1).status(sent).build();
+        Friendship friendship2 = Friendship.builder().person(person2).friend(person3).status(sent).build();
+        Friendship friendship3 = Friendship.builder().person(person2).friend(person4).status(accepted).build();
+        List<Friendship> queryResult = List.of(friendship1, friendship2, friendship3);
+        given(friendshipRepository.findFriendshipsByPersonId(person2.getId())).willReturn(queryResult);
+
+        List<FriendListDto> result = service.getFriendsList(person2.getId());
+
+        FriendListDto dto1 = getFriendListDto(person1, sent);
+        FriendListDto dto2 = getFriendListDto(person3, sent);
+        FriendListDto dto3 = getFriendListDto(person4, accepted);
+        List<FriendListDto> correctResult = List.of(dto1, dto2, dto3);
+        then(statusCodeMapper).should(times(2)).toDto(sent);
+        then(statusCodeMapper).should().toDto(accepted);
+        assertEquals(correctResult, result);
+    }
+
+    @Test
+    void getFriendsList_OnlyReceivedRequests_EmptyList() {
+        Friendship friendship1 = Friendship.builder().person(person2).friend(person1).status(received).build();
+        Friendship friendship2 = Friendship.builder().person(person2).friend(person3).status(received).build();
+        List<Friendship> queryResult = List.of(friendship1, friendship2);
+        given(friendshipRepository.findFriendshipsByPersonId(person2.getId())).willReturn(queryResult);
+
+        List<FriendListDto> result = service.getFriendsList(person2.getId());
+
+        assertEquals(List.of(), result);
+    }
+
+    @Test
+    void getReceivedRequests_NoRequests_EmptyList() {
+        given(friendshipRepository.findFriendshipsByPersonIdAndStatusCode(person1.getId(), received.getCode()))
+                .willReturn(List.of());
+
+        List<FriendListDto> result = service.getReceivedRequests(person1.getId());
+
+        assertEquals(List.of(), result);
+    }
+
+    @Test
+    void getReceivedRequests_ManyRequests_ListOfRequests() {
+        Friendship friendship1 = Friendship.builder().person(person2).friend(person1).status(received).build();
+        Friendship friendship2 = Friendship.builder().person(person2).friend(person3).status(received).build();
+        List<Friendship> queryResult = List.of(friendship1, friendship2);
+        given(friendshipRepository.findFriendshipsByPersonIdAndStatusCode(person2.getId(), received.getCode()))
+                .willReturn(queryResult);
+
+        List<FriendListDto> result = service.getReceivedRequests(person2.getId());
+
+        FriendListDto dto1 = getFriendListDto(person1, received);
+        FriendListDto dto2 = getFriendListDto(person3, received);
+        List<FriendListDto> correctResult = List.of(dto1, dto2);
+        then(friendshipMapper).should().toFriendListDtos(List.of(friendship1, friendship2));
+        assertEquals(correctResult, result);
+    }
 
     @Test
     void addFriend() {
@@ -143,13 +208,5 @@ class FriendshipServiceTest {
 
     @Test
     void removeFriend() {
-    }
-
-    @Test
-    void getFriendsList() {
-    }
-
-    @Test
-    void getReceivedRequests() {
     }
 }

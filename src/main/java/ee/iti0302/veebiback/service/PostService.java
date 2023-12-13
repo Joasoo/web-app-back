@@ -9,8 +9,7 @@ import ee.iti0302.veebiback.service.mapper.PostMapper;
 import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.PostRepository;
 import ee.iti0302.veebiback.service.mapper.StatusCodeMapper;
-import ee.iti0302.veebiback.util.enums.FriendshipStatus;
-import ee.iti0302.veebiback.util.enums.StatusCodeClass;
+import ee.iti0302.veebiback.util.constant.FriendshipStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +27,6 @@ public class PostService {
     private final PersonRepository personRepository;
     private final PostMapper postMapper;
     private final FriendshipRepository friendshipRepository;
-    private final StatusCodeMapper statusCodeMapper;
 
     public List<PostDto> getPostList(Long personId) {
         List<Post> postList =

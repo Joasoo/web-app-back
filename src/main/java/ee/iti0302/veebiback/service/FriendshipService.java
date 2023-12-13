@@ -9,8 +9,6 @@ import ee.iti0302.veebiback.repository.PersonRepository;
 import ee.iti0302.veebiback.repository.StatusCodeRepository;
 import ee.iti0302.veebiback.service.mapper.FriendshipMapper;
 import ee.iti0302.veebiback.service.mapper.StatusCodeMapper;
-import ee.iti0302.veebiback.util.enums.FriendshipStatus;
-import ee.iti0302.veebiback.util.enums.StatusCodeClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_A;
-import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_S;
-import static ee.iti0302.veebiback.util.enums.FriendshipStatus.FR_STATUS_R;
+import static ee.iti0302.veebiback.util.constant.FriendshipStatus.FR_STATUS_A;
+import static ee.iti0302.veebiback.util.constant.FriendshipStatus.FR_STATUS_S;
+import static ee.iti0302.veebiback.util.constant.FriendshipStatus.FR_STATUS_R;
 
 @Service
 @RequiredArgsConstructor
