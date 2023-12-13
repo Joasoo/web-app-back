@@ -2,10 +2,12 @@ package ee.iti0302.veebiback.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "person_friend")
@@ -17,12 +19,12 @@ public class Friendship {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name="fk_person_id")
+    @JoinColumn(name = "fk_person_id")
     private Person person;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name="fk_friend_id")
+    @JoinColumn(name = "fk_friend_id")
     private Person friend;
 
     @NotNull
@@ -30,3 +32,4 @@ public class Friendship {
     @JoinColumn(name = "fk_friend_status")
     private StatusCode status;
 }
+

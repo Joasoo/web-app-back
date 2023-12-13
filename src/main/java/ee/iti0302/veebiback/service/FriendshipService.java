@@ -35,8 +35,8 @@ public class FriendshipService {
         Optional<Friendship> optionalFriendship =
                 friendshipRepository.findFriendshipByPersonIdAndFriendId(personId, friendId);
         if (optionalFriendship.isPresent()) {
-           Friendship friendship = optionalFriendship.get();
-           return friendshipMapper.toFriendListDto(friendship);
+            Friendship friendship = optionalFriendship.get();
+            return friendshipMapper.toFriendListDto(friendship);
         }
         // They are not friends and there aren't any pending requests
         return new FriendListDto();
@@ -103,10 +103,11 @@ public class FriendshipService {
                 var friend = relation.getFriend();
                 var fullName = new FullNameDto(friend.getFirstName(), friend.getLastName());
 
-                var friendListDto = new FriendListDto();
-                friendListDto.setId(friend.getId());
-                friendListDto.setName(fullName);
-                friendListDto.setStatus(status);
+                var friendListDto = FriendListDto.builder()
+                        .id(friend.getId())
+                        .name(fullName)
+                        .status(status)
+                        .build();
                 validRelations.add(friendListDto);
             }
         }
@@ -123,10 +124,10 @@ public class FriendshipService {
     // --------------------------------------------- Private methods ---------------------------------------------
 
     private Friendship createFriendship(Person person, Person friend) {
-        Friendship friendship = new Friendship();
-        friendship.setPerson(person);
-        friendship.setFriend(friend);
-        return friendship;
+        return Friendship.builder()
+                .person(person)
+                .friend(friend)
+                .build();
     }
 
     private void acceptRequest(Friendship requestPerson, Friendship requestFriend) {
