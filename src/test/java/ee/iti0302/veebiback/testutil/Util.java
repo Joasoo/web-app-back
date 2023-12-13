@@ -168,6 +168,20 @@ public class Util {
         return dto;
     }
 
+    public static ViewProfileDataDto getViewProfileDataDto(Person person) {
+        return ViewProfileDataDto.builder()
+                .id(person.getId())
+                .bio(person.getBio())
+                .firstName(person.getFirstName())
+                .lastName(person.getLastName())
+                .hometown(person.getHometown())
+                .dateOfBirth(person.getDateOfBirth())
+                .relationshipStatus(getStatusCodeDto(person.getRelationshipStatus()))
+                .residence(person.getResidence())
+                .workplace(person.getWorkplace())
+                .build();
+    }
+
     // ---------------------------- Private ----------------------------
 
     private static String getRandomEmail() {

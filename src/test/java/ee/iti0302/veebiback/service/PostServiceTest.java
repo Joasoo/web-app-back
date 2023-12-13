@@ -86,7 +86,7 @@ class PostServiceTest {
         List<Post> postList = List.of(post3, post4);
         given(postRepository.findAllByPersonIdOrderByCreatedAtDesc(person2.getId())).willReturn(postList);
 
-        List<PostDto> result = service.getPostList(person1.getId());
+        List<PostDto> result = service.getPostList(person2.getId());
 
         then(postMapper).should().toDtoList(postList);
         assertEquals(List.of(getPostDto(post3), getPostDto(post4)), result);
