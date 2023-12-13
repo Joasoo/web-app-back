@@ -186,9 +186,9 @@ public class Util {
     }
 
     public static class StatusCodeMock {
-        private String code;
-        private String codeClass;
-        private String value;
+        private final String code;
+        private final String codeClass;
+        private final String value;
 
         public StatusCodeDto asDto() {
             return StatusCodeDto.builder()
