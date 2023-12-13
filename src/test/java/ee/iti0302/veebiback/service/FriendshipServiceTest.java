@@ -56,9 +56,6 @@ class FriendshipServiceTest {
         person2 = getMockPerson(person1.getId());
         person3 = getMockPerson(List.of(person1.getId(), person2.getId()));
         person4 = getMockPerson(List.of(person1.getId(), person2.getId(), person3.getId()));
-        accepted = getMockStatusCode(FriendshipStatus.FR_STATUS_A).asEntity();
-        sent = getMockStatusCode(FriendshipStatus.FR_STATUS_S).asEntity();
-        received = getMockStatusCode(FriendshipStatus.FR_STATUS_R).asEntity();
     }
 
     @Test

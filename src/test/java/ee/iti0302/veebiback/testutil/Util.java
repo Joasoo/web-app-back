@@ -185,7 +185,6 @@ public class Util {
                 .toString();
     }
 
-    @Builder
     public static class StatusCodeMock {
         private String code;
         private String codeClass;
@@ -205,6 +204,40 @@ public class Util {
                     .codeClass(codeClass)
                     .value(value)
                     .build();
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        public StatusCodeMock(String code, String codeClass, String value) {
+            this.code = code;
+            this.codeClass = codeClass;
+            this.value = value;
+        }
+
+        public static class Builder {
+            private String code;
+            private String codeClass;
+            private String value;
+            public Builder code(String code) {
+                this.code = code;
+                return this;
+            }
+
+            public Builder codeClass(String codeClass) {
+                this.codeClass = codeClass;
+                return this;
+            }
+
+            public Builder value(String value) {
+                this.value = value;
+                return this;
+            }
+
+            public StatusCodeMock build() {
+                return new StatusCodeMock(code, codeClass, value);
+            }
         }
     }
 }
