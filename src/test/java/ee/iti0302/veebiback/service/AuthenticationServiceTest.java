@@ -8,11 +8,17 @@ import ee.iti0302.veebiback.service.mapper.PersonMapperImpl;
 import ee.iti0302.veebiback.util.constant.RelationshipStatus;
 import ee.iti0302.veebiback.util.exception.ApplicationException;
 import ee.iti0302.veebiback.util.validation.CustomValidator;
+import ee.iti0302.veebiback.util.validation.CustomValidatorImpl;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidationException;
+import org.hibernate.validator.HibernateValidator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -22,6 +28,7 @@ import static ee.iti0302.veebiback.testutil.Util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class AuthenticationServiceTest {
     @Spy
     private PasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -30,9 +37,11 @@ class AuthenticationServiceTest {
     @Spy
     private PersonMapper personMapper = new PersonMapperImpl();
     @Spy
-    private OAuthJWTManager jwtManager;
-    @Spy
-    private CustomValidator validator;
+    private CustomValidator validator = new CustomValidatorImpl(Validation
+            .byProvider(HibernateValidator.class)
+            .configure()
+            .buildValidatorFactory()
+            .getValidator());
     @InjectMocks
     private AuthenticationService authenticationService;
 
@@ -60,8 +69,8 @@ class AuthenticationServiceTest {
 
         assertDoesNotThrow(() -> authenticationService.registerUser(correctRegisterDto));
 
-        var entity = then(personMapper).should().registerDtoToEntity(correctRegisterDto);
-        then(personRepository).should().save(entity);
+        then(personMapper).should().registerDtoToEntity(correctRegisterDto);
+        then(validator).should().validateWithThrow(correctRegisterDto);
     }
 
     @Test

@@ -168,6 +168,20 @@ public class Util {
         return dto;
     }
 
+    public static ViewProfileDataDto getViewProfileDataDto(Person person) {
+        return ViewProfileDataDto.builder()
+                .id(person.getId())
+                .bio(person.getBio())
+                .firstName(person.getFirstName())
+                .lastName(person.getLastName())
+                .hometown(person.getHometown())
+                .dateOfBirth(person.getDateOfBirth())
+                .relationshipStatus(getStatusCodeDto(person.getRelationshipStatus()))
+                .residence(person.getResidence())
+                .workplace(person.getWorkplace())
+                .build();
+    }
+
     // ---------------------------- Private ----------------------------
 
     private static String getRandomEmail() {
@@ -185,11 +199,10 @@ public class Util {
                 .toString();
     }
 
-    @Builder
     public static class StatusCodeMock {
-        private String code;
-        private String codeClass;
-        private String value;
+        private final String code;
+        private final String codeClass;
+        private final String value;
 
         public StatusCodeDto asDto() {
             return StatusCodeDto.builder()
@@ -205,6 +218,40 @@ public class Util {
                     .codeClass(codeClass)
                     .value(value)
                     .build();
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        public StatusCodeMock(String code, String codeClass, String value) {
+            this.code = code;
+            this.codeClass = codeClass;
+            this.value = value;
+        }
+
+        public static class Builder {
+            private String code;
+            private String codeClass;
+            private String value;
+            public Builder code(String code) {
+                this.code = code;
+                return this;
+            }
+
+            public Builder codeClass(String codeClass) {
+                this.codeClass = codeClass;
+                return this;
+            }
+
+            public Builder value(String value) {
+                this.value = value;
+                return this;
+            }
+
+            public StatusCodeMock build() {
+                return new StatusCodeMock(code, codeClass, value);
+            }
         }
     }
 }

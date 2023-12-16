@@ -5,6 +5,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class PersonFullNameDto extends FullNameDto {
     private Long id; // Person's ID
 
