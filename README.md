@@ -33,12 +33,13 @@ Navigate to the project directory:
 
 `cd [project folder]`
 
-Start Docker and build the container:
+Open the included Docker Compose file and set PostgreSQL username and password as needed.
+Start Docker and run the included Docker Compose file:
 `docker-compose up -d`
 
-The application.properties and postgres database now running in Docker container should have the correct configuration.
-If necessary, locate the application.properties file and change PostgreSQL user and password from there. 
-
+PostgreSQL database should now be running in a Docker container.
+In the project directory, locate the application.properties file and change the `spring.datasource.username`
+and `spring.datasource.password` to your PostgreSQL username and password.
 
 Build the project (this will also download the necessary dependencies):
 
@@ -46,4 +47,4 @@ Build the project (this will also download the necessary dependencies):
 
 Run the application:
 
-`./gradlew bootRun`
+`.\gradlew bootRun --args='--spring.profiles.active=dev'`
