@@ -1,0 +1,15 @@
+version: '3'
+services:
+    postgres:
+        image: postgres
+        container_name: postgres-db
+        ports:
+            - "5432"
+        environment:
+            - POSTGRES_USER=spoiled-beef
+            - POSTGRES_PASSWORD=t548954winthu3q3g5i3287EF4WNI3487g4nig5btrsk!
+        volumes:
+            - postgres-vol:/var/lib/postgresql/data
+            - /postgresql.conf:/etc/postgresql/postgresql.conf
+volumes:
+    postgres-vol:
