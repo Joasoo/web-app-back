@@ -39,11 +39,11 @@ Start Docker and build the container:
 The application.properties and postgres database now running in Docker container should have the correct configuration.
 If necessary, locate the application.properties file and change PostgreSQL user and password from there. 
 
+### -develop vms tagi lisamise jutt siia vist
+
 Build the project (this will also download the necessary dependencies):
 
 `./gradlew build`
-
-### -develop vms tagi lisamise jutt siia vist
 
 Run the application:
 
