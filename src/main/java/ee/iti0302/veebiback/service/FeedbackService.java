@@ -17,7 +17,6 @@ public class FeedbackService {
 
     public BaseDto saveFeedback(FeedbackDto dto) {
         validator.validateWithThrow(dto);
-        System.out.println(dto);
         var entity = feedbackMapper.toEntity(dto);
         feedbackRepository.save(entity);
         return new BaseDto();
