@@ -256,4 +256,16 @@
             <column name="bio" type="text" remarks="Profile bio"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="18-12-2023 Feedback table" author="Allan Lip">
+        <createTable tableName="feedback">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="rating" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="comment" type="text"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

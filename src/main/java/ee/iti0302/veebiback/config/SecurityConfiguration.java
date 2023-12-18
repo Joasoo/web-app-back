@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/profile/relationship-status").permitAll()
                         .requestMatchers("/api/quote").permitAll()
+                        .requestMatchers("/api/feedback").permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
