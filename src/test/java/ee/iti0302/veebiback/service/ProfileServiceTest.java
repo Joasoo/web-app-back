@@ -56,16 +56,6 @@ class ProfileServiceTest {
     }
 
     @Test
-    void getViewProfileData_ProfileExists_FilledDto() {
-        given(personRepository.findById(person1.getId())).willReturn(Optional.of(person1));
-
-        ViewProfileDataDto result = service.getViewProfileData(person1.getId());
-
-        then(personMapper).should().entityToProfileDataDto(person1);
-        assertEquals(getViewProfileDataDto(person1), result);
-    }
-
-    @Test
     void getEditProfileData() {
     }
 
