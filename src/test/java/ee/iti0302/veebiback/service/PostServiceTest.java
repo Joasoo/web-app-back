@@ -125,14 +125,4 @@ class PostServiceTest {
         assertEquals(correctResult, result);
     }
 
-    @Test
-    void addPost() {
-
-    }
-
-    @Test
-    void deletePost() {
-
-    }
-
 }

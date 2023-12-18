@@ -73,7 +73,4 @@ class AuthenticationServiceTest {
         then(validator).should().validateWithThrow(correctRegisterDto);
     }
 
-    @Test
-    void loginUser() {
-    }
 }

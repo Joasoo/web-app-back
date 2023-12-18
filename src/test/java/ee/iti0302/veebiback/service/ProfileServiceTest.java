@@ -54,16 +54,4 @@ class ProfileServiceTest {
 
         assertEquals(new ViewProfileDataDto(), result);
     }
-
-    @Test
-    void getEditProfileData() {
-    }
-
-    @Test
-    void updateProfileData() {
-    }
-
-    @Test
-    void getPersonName() {
-    }
 }

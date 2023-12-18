@@ -201,13 +201,4 @@ class FriendshipServiceTest {
         then(friendshipMapper).should().toFriendListDtos(List.of(friendship1, friendship2));
         assertEquals(correctResult, result);
     }
-
-    @Test
-    void addFriend() {
-
-    }
-
-    @Test
-    void removeFriend() {
-    }
 }
