@@ -7,6 +7,7 @@ This is a social media platform designed to be something along the lines of Face
 - Friend requests
 - User search
 - Input validation
+- External API integration (quotes on Login page)
 
 ### Authors
 - Markus Joasoo
@@ -20,7 +21,7 @@ This is a social media platform designed to be something along the lines of Face
 - Spring Security
 - Liquibase 4.17.2
 - Mapstruct 1.5.5
-- Lombok
+- Lombok 1.18.30
 - Hibernate Validator 8.0.1
 - OpenAPI 2.3.0
 
@@ -33,13 +34,13 @@ Navigate to the project directory:
 
 `cd [project folder]`
 
-Open the included Docker Compose file and set PostgreSQL username and password as needed.
+Open the included `docker-compose.yml` and set PostgreSQL username and password as desired or leave them as is.
 Start Docker and run the included Docker Compose file:
 `docker-compose up -d`
 
 PostgreSQL database should now be running in a Docker container.
-In the project directory, locate the application.properties file and change the `spring.datasource.username`
-and `spring.datasource.password` to your PostgreSQL username and password.
+Go to `src/main/resources/application.properties` and make sure the `spring.datasource.username`
+and `spring.datasource.password` match the username and password in `docker-compose.yml`.
 
 Build the project (this will also download the necessary dependencies):
 
@@ -47,4 +48,4 @@ Build the project (this will also download the necessary dependencies):
 
 Run the application:
 
-`.\gradlew bootRun --args='--spring.profiles.active=dev'`
+`./gradlew bootRun --args='--spring.profiles.active=dev'`
